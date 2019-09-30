@@ -1,2 +1,10 @@
-# webBBS
-web homework
+# 1.安装WampServer
+下载地址：http://www.wampserver.com/
+它已经包含了 PHP、Apache、Mysql 等服务,免去了开发人员将时间花费在繁琐的配置环境过程。
+
+# 2.重新设置工作目录
+在windows工具栏找到wampserver，打开apache→httpd.conf，搜索DocumentRoot，修改DocumentRoot和Directory到指定目录（“…/webBBS/”），保存，httpd-vhosts.conf进行同样的操作，然后重启所有服务。
+打开浏览器，输入网址“localhost/test.php”，如正常打开则设置成功。
+
+
+
