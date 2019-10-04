@@ -11,15 +11,15 @@ $_SESSION['use_db'] = "";
 
 <head>
 <meta charset="utf-8">
-<title>虾扯蛋</title>
+<title>Sakura</title>
 </head>
 
 <body>
 <?php
 // 全局变量
-$title = "虾扯蛋 - 开发页面";
+$title = "Sakura - 开发页面";
 ?>
-<?php include 'header.php'; ?>
+<?php include 'header.php'; include 'header.php'; ?>
 
 <form method="post" action="">
 <input type="submit" value="重置页面" />

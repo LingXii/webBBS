@@ -109,4 +109,12 @@ function execute_sql($conn,$sql)
     echo "<br />执行语句成功：".$sql;
 }
 
+
+function f($conn, $sql)
+{
+    $retval = mysqli_query($conn,$sql);
+    if(! $retval)
+        die("<br />语句执行错误：".mysqli_error($conn));
+}
+
 ?>
