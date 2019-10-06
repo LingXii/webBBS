@@ -1,4 +1,12 @@
 <?php
+function connect_db($host,$user_name,$password)
+{
+    $conn = mysqli_connect($host, $user_name, $password);
+    if(!$conn) die("数据库服务器发生错误：".mysqli_connect_error());
+    mysqli_set_charset($conn,'utf8');
+    return $conn;
+}
+
 function create_db($conn, $name)
 {
     $sql = "CREATE DATABASE ".$name;
@@ -109,12 +117,97 @@ function execute_sql($conn,$sql)
     echo "<br />执行语句成功：".$sql;
 }
 
+function qurey_one($conn,$select,$from,$where_key,$where_value)
+{   //调用此函数须确保查询的结果唯一
+    $sql = 'select '.$select.' from '.$from.' where '.$where_key.'='.$where_value;
+    $retval = mysqli_query($conn,$sql);
+    if(! $retval)
+        die("<br />查询失败：".mysqli_error($conn));
+    $row = mysqli_fetch_array($retval);
+    if(!$row) return NULL;
+    else return $row[0];
+}
 
-function f($conn, $sql)
+function execute_sql_outside($conn, $sql)
 {
     $retval = mysqli_query($conn,$sql);
     if(! $retval)
         die("<br />语句执行错误：".mysqli_error($conn));
+    echo "<br />执行语句成功：".$sql;
+}
+
+function build_web_database($conn)
+{
+    // TODO: 主码，外码，check，自增等等
+    
+    // 用户表：uid，账号，密码，邮箱,昵称，头像地址，权限(0游客，1用户，2管理员，3大老板)，
+    // 管理的版面(bid,多个版面用'|'分隔)
+    $table = 'user_info(
+            user_id int auto_increment,
+            user_name varchar(32) unique,
+            user_pwd blob(128),
+            user_email varchar(32) unique,
+            user_nickname varchar(32),
+            user_headpic_url varchar(256),                
+            user_permission int,
+            user_admin_board varchar(512),
+            primary key (user_id))';
+    execute_sql_outside($conn, 'create table if not exists sakura.'.$table);
+    $sql = 'alter table sakura.user_info CONVERT TO CHARACTER SET utf8';
+    execute_sql_outside($conn, $sql);
+    
+    // 版面表：bid（1为总版面），名称，管理员(uid,多个管理员用'|'分隔)
+    $table = 'board(
+            board_id int auto_increment,
+            board_name varchar(16) unique,
+            board_admin varchar(512),
+            primary key (board_id))';
+    execute_sql_outside($conn, 'create table if not exists sakura.'.$table);
+    $sql = 'alter table sakura.board CONVERT TO CHARACTER SET utf8';
+    execute_sql_outside($conn, $sql);
+    
+    // 帖子表：pid，标题，所属版面，发帖用户，创建时间，更新时间，
+    // 内容(检测越界，内容过多则用文件储存，数据库放文件路径)，状态(1正常，2违规，3不可回复)
+    $table = 'posts(
+            post_id int auto_increment,
+            post_title varchar(128),
+            post_bid int,
+            post_uid int,
+            post_createtime datetime,
+            post_updatetime datetime,
+            post_content varchar(16384),
+            post_state int,
+            primary key (post_id))';
+    execute_sql_outside($conn, 'create table if not exists sakura.'.$table);
+    $sql = 'alter table sakura.posts CONVERT TO CHARACTER SET utf8';
+    execute_sql_outside($conn, $sql);
+                
+    // 回复表：rid，发回复的用户，所属帖子，回复时间，
+    // 内容(检测越界，内容过多则用文件储存，数据库放文件路径)，状态(1正常，2违规)
+    $table = 'reply(
+            reply_id int auto_increment,
+            reply_uid int,
+            reply_pid int,
+            reply_createtime datetime,
+            reply_content varchar(16384), 
+            reply_state int,
+            primary key (reply_id))';
+    execute_sql_outside($conn, 'create table if not exists sakura.'.$table);  
+    $sql = 'alter table sakura.reply CONVERT TO CHARACTER SET utf8';
+    execute_sql_outside($conn, $sql);
+    
+}
+
+function check_usrpsw($conn,$name,$psw)
+{   //检查用户账号密码是否正确，返回uid
+    $sql = 'SELECT user_id FROM sakura.user_info WHERE user_name="'.$name.'"'
+            . 'AND user_pwd=PASSWORD("'.$psw.'")';
+    $retval = mysqli_query($conn,$sql);
+    if(! $retval)
+        die("<br />发生错误：".mysqli_error($conn));
+    $row = mysqli_fetch_array($retval);
+    if(!$row) return NULL;
+    else return $row[0];
 }
 
 ?>

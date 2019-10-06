@@ -18,12 +18,13 @@ $_SESSION['use_db'] = "";
 <?php
 // 全局变量
 $title = "Sakura - 开发页面";
+$show_buttons = FALSE;
 ?>
-<?php include 'header.php'; include 'header.php'; ?>
+<?php include_once 'header.php'; ?>
 
 <form method="post" action="">
 <input type="submit" value="重置页面" />
-<input type="hidden" name="call" value="page_reset" />
+<input type="hidden" name="call" value="1" />
 </form>
 <?php
     function page_reset()
@@ -37,7 +38,7 @@ $title = "Sakura - 开发页面";
 用户名: <input type="text" name="dbuser" value="root">
 密码： <input type="password" name="dbpass" value="">
 <input type="submit" value="连接数据库" />
-<input type="hidden" name="call" value="db_connect" />
+<input type="hidden" name="call" value="2" />
 </form>
 <?php
     function db_connect($h,$u,$p)
@@ -56,8 +57,8 @@ $title = "Sakura - 开发页面";
 // 每个按钮调用相应的函数
 if(isset($_POST['call']))
 {
-    if($_POST['call']=="page_reset") page_reset();
-    else if($_POST['call']=="db_connect") db_connect($_POST['dbhost'],
+    if($_POST['call']=="1") page_reset();
+    else if($_POST['call']=="2") db_connect($_POST['dbhost'],
         $_POST['dbuser'],$_POST['dbpass']);
 }
 ?>
