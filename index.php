@@ -22,9 +22,5 @@
 ?>
 <p>SakuraSakura Ai Tai Yo ~</p>
 
-<?php
-
-?>
-
 </body>
 </html>

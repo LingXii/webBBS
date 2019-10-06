@@ -12,9 +12,6 @@
 </head>
 
 <body>
-<?php
-    if(!isset($_GET['uid'])) die("拒绝访问！");
-?>
 <?php 
     $title="Sakura";
     $show_buttons = TRUE;
@@ -22,6 +19,13 @@
 <?php 
     include 'header.php';
     include_once 'database_util.php';
+?>
+<?php
+    if(!isset($_GET['uid'])) die("拒绝访问！");
+    $conn = connect_db('localhost','root','');
+    $str_uid = strval($_GET['uid']);
+    if(qurey_one($conn,'user_id','sakura.user_info','user_id', $str_uid) == NULL)
+        die("查无此人！");
 ?>
 
 <?php 
