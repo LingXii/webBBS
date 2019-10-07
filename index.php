@@ -17,10 +17,14 @@
     $show_buttons = TRUE;
 ?>
 <?php 
+    include_once 'style.php';
     include 'header.php';
     include_once 'database_util.php';
 ?>
-<p>SakuraSakura Ai Tai Yo ~</p>
+
+<?php
+
+?>
 
 </body>
 </html>

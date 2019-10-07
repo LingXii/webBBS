@@ -22,6 +22,8 @@ $show_buttons = FALSE;
 ?>
 <?php include_once 'header.php'; ?>
 
+<br/>
+<div class="form">
 <form method="post" action="">
 <input type="submit" value="重置页面" />
 <input type="hidden" name="call" value="1" />
@@ -52,6 +54,7 @@ $show_buttons = FALSE;
         exit;
     }
 ?>
+</div>
 
 <?php
 // 每个按钮调用相应的函数

@@ -17,33 +17,36 @@
     $show_buttons = FALSE;
 ?>
 <?php 
+    include_once 'style.php';
     include 'header.php';
     include_once 'database_util.php';
 ?>
-<p>SakuraSakura Ai Tai Yo ~</p>
 
-<?php 
-    if(isset($_POST['user_name']) && isset($_POST['user_pwd']))
-    {
-        echo '<form method="post" action="">
-            帐号: <input type="text" name="user_name" value="'.$_POST['user_name'].
-                '" required oninvalid="setCustomValidity('."'".'请填写账号'."'".');"/>
-            密码: <input type="password" name="user_pwd" value="'.$_POST['user_pwd'].
-                '" required oninvalid="setCustomValidity('."'".'请填写密码'."'".');"/>
-            <input type="submit" value="登录"/>
-            <input type="hidden" name="call" value="13"/>
-            </form>';
-    }
-    else
-    {
-        echo '<form method="post" action="">
-            帐号: <input type="text" name="user_name" required oninvalid="setCustomValidity('."'".'请填写账号'."'".');"/>
-            密码: <input type="password" name="user_pwd" required oninvalid="setCustomValidity('."'".'请填写密码'."'".');"/>
-            <input type="submit" value="登录"/>
-            <input type="hidden" name="call" value="13"/>
-            </form>';
-    }
-?>
+<br/>
+<div class="form">
+    <?php 
+        if(isset($_POST['user_name']) && isset($_POST['user_pwd']))
+        {
+            echo '<form method="post" action="">
+                帐号: <input type="text" name="user_name" value="'.$_POST['user_name'].
+                    '" required oninvalid="setCustomValidity('."'".'请填写账号'."'".');"/>
+                密码: <input type="password" name="user_pwd" value="'.$_POST['user_pwd'].
+                    '" required oninvalid="setCustomValidity('."'".'请填写密码'."'".');"/>
+                <input type="submit" value="登录"/>
+                <input type="hidden" name="call" value="13"/>
+                </form>';
+        }
+        else
+        {
+            echo '<form method="post" action="">
+                帐号: <input type="text" name="user_name" required oninvalid="setCustomValidity('."'".'请填写账号'."'".');"/>
+                密码: <input type="password" name="user_pwd" required oninvalid="setCustomValidity('."'".'请填写密码'."'".');"/>
+                <input type="submit" value="登录"/>
+                <input type="hidden" name="call" value="13"/>
+                </form>';
+        }
+    ?>
+</div>
 
 <?php
     if(isset($_POST['call']) and $_POST['call']=="13")

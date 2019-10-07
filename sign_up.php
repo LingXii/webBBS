@@ -8,28 +8,31 @@
 
 <head>
 <meta charset="utf-8">
-<title>Sakura</title>
+<title>Sakura - 注册页面</title>
 </head>
 
 <body>
 <?php 
-    $title="Sakura - 注册页面";
+    $title="Sakura";
     $show_buttons = FALSE;
 ?>
 <?php 
+    include_once 'style.php';
     include 'header.php';
     include_once 'database_util.php';
 ?>
-<p>SakuraSakura Ai Tai Yo ~</p>
 
-<form method="post" action="">
-帐号: <input type="text" name="user_name" required oninvalid="setCustomValidity('请填写账号');"/>
-密码: <input type="password" name="user_pwd" required oninvalid="setCustomValidity('请填写密码');"/>
-确认密码：<input type="password" name="user_pwd2" required oninvalid="setCustomValidity('请填写密码');"/>
-邮箱: <input type="text" name="user_email" required oninvalid="setCustomValidity('请填写邮箱');"/>
-<input type="submit" value="注册"/>
-<input type="hidden" name="call" value="12"/>
-</form>
+<br/>
+<div class="form">
+    <form method="post" action="">
+    帐号: <input type="text" name="user_name" required oninvalid="setCustomValidity('请填写账号');"/>
+    密码: <input type="password" name="user_pwd" required oninvalid="setCustomValidity('请填写密码');"/>
+    确认密码：<input type="password" name="user_pwd2" required oninvalid="setCustomValidity('请填写密码');"/>
+    邮箱: <input type="text" name="user_email" required oninvalid="setCustomValidity('请填写邮箱');"/>
+    <input type="submit" value="注册"/>
+    <input type="hidden" name="call" value="12"/>
+    </form>
+</div>
 
 
 
