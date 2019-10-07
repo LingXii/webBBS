@@ -85,6 +85,11 @@
 <input type="hidden" name="call" value="14" />
 </form>
 
+<form method="post" action="">
+<input type="submit" value="一刀999" />
+<input type="hidden" name="call" value="999" />
+</form>
+
 <?php
     // 每个按钮调用相应的函数(请把函数写到util文件里面)
     if(isset($_POST['call']))
@@ -96,9 +101,10 @@
         else if($_POST['call']=="7") show_tbs($conn);
         else if($_POST['call']=="8") show_tb($conn,$_POST['tbname']);
         else if($_POST['call']=="9") show_tb_attr($conn,$_POST['tbname']);
-        else if($_POST['call']=="10") execute_sql($conn,$_POST['sql']);
+        else if($_POST['call']=="10") execute_sql_debug($conn,$_POST['sql']);
         else if($_POST['call']=="11") build_web_database($conn);
         else if($_POST['call']=="14") build_database_user($conn);
+        else if($_POST['call']=='999') init($conn);
     }
 ?>
 

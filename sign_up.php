@@ -25,10 +25,10 @@
 <br/>
 <div class="form">
     <form method="post" action="">
-    帐号: <input type="text" class="login" name="user_name" required oninvalid="setCustomValidity('请填写账号');"/>
-    密码: <input type="password" class="login" name="user_pwd" required oninvalid="setCustomValidity('请填写密码');"/>
-    确认密码：<input type="password" class="login" name="user_pwd2" required oninvalid="setCustomValidity('请填写密码');"/>
-    邮箱: <input type="text" class="login" name="user_email" required oninvalid="setCustomValidity('请填写邮箱');"/>
+    帐号: <input type="text" class="login" name="user_name" required oninvalid="setCustomValidity('请填写账号');" oninput="setCustomValidity('')"/>
+    密码: <input type="password" class="login" name="user_pwd" required oninvalid="setCustomValidity('请填写密码');" oninput="setCustomValidity('')"/>
+    确认密码：<input type="password" class="login" name="user_pwd2" required oninvalid="setCustomValidity('请填写密码');" oninput="setCustomValidity('')"/>
+    邮箱: <input type="text" class="login" name="user_email" required oninvalid="setCustomValidity('请填写邮箱');" oninput="setCustomValidity('')"/>
     昵称: <input type="text" class="login" name="user_nickname"/>
     <input type="submit" class="login" value="注册"/>
     <input type="hidden" name="call" value="12"/>
@@ -41,10 +41,10 @@
             die("两次输入的密码不同！");
         $conn = connect_db('localhost', 'web_user', '');
 
-        $uid = qurey_one($conn,'user_id','sakura.user_info',
+        $uid = query_one($conn,'user_id','sakura.user_info',
                 'user_name','"'.$_POST['user_name'].'"');
         if($uid != NULL) die("注册失败：账号已存在！");
-        $uid = qurey_one($conn,'user_email','sakura.user_info',
+        $uid = query_one($conn,'user_email','sakura.user_info',
                 'user_email','"'.$_POST['user_email'].'"');
         if($uid != NULL) die("注册失败：该邮箱已使用！");
         

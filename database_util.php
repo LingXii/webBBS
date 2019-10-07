@@ -1,4 +1,5 @@
 <?php
+
 function connect_db($host,$user_name,$password)
 {
     $conn = mysqli_connect($host, $user_name, $password);
@@ -99,7 +100,7 @@ function show_tb_attr($conn,$name)
     echo_table($retval);
 }
 
-function execute_sql($conn,$sql)
+function execute_sql_debug($conn,$sql)
 {
     select_db($conn, $_SESSION['use_db']);
     $retval = mysqli_query($conn,$sql);
@@ -117,7 +118,7 @@ function execute_sql($conn,$sql)
     echo "<br />执行语句成功：".$sql;
 }
 
-function qurey_one($conn,$select,$from,$where_key,$where_value)
+function query_one($conn,$select,$from,$where_key,$where_value)
 {   //调用此函数须确保查询的结果唯一
     $sql = 'select '.$select.' from '.$from.' where '.$where_key.'='.$where_value;
     $retval = mysqli_query($conn,$sql);
@@ -128,7 +129,7 @@ function qurey_one($conn,$select,$from,$where_key,$where_value)
     else return $row[0];
 }
 
-function execute_sql_outside($conn, $sql)
+function execute_sql($conn, $sql)
 {
     $retval = mysqli_query($conn,$sql);
     if(! $retval)
@@ -152,9 +153,9 @@ function build_web_database($conn)
             user_permission int,
             user_admin_board varchar(512),
             primary key (user_id))';
-    execute_sql_outside($conn, 'create table if not exists sakura.'.$table);
+    execute_sql($conn, 'create table if not exists sakura.'.$table);
     $sql = 'alter table sakura.user_info CONVERT TO CHARACTER SET utf8';
-    execute_sql_outside($conn, $sql);
+    execute_sql($conn, $sql);
     
     // 版面表：bid（1为总版面），名称，管理员(uid,多个管理员用'|'分隔)
     $table = 'board(
@@ -162,9 +163,9 @@ function build_web_database($conn)
             board_name varchar(16) unique,
             board_admin varchar(512),
             primary key (board_id))';
-    execute_sql_outside($conn, 'create table if not exists sakura.'.$table);
+    execute_sql($conn, 'create table if not exists sakura.'.$table);
     $sql = 'alter table sakura.board CONVERT TO CHARACTER SET utf8';
-    execute_sql_outside($conn, $sql);
+    execute_sql($conn, $sql);
     
     // 帖子表：pid，标题，所属版面，发帖用户，创建时间，更新时间，
     // 内容(检测越界，内容过多则用文件储存，数据库放文件路径)，状态(1正常，2违规，3不可回复)
@@ -178,9 +179,9 @@ function build_web_database($conn)
             post_content varchar(16384),
             post_state int,
             primary key (post_id))';
-    execute_sql_outside($conn, 'create table if not exists sakura.'.$table);
+    execute_sql($conn, 'create table if not exists sakura.'.$table);
     $sql = 'alter table sakura.posts CONVERT TO CHARACTER SET utf8';
-    execute_sql_outside($conn, $sql);
+    execute_sql($conn, $sql);
                 
     // 回复表：rid，发回复的用户，所属帖子，回复时间，
     // 内容(检测越界，内容过多则用文件储存，数据库放文件路径)，状态(1正常，2违规)
@@ -192,17 +193,17 @@ function build_web_database($conn)
             reply_content varchar(16384), 
             reply_state int,
             primary key (reply_id))';
-    execute_sql_outside($conn, 'create table if not exists sakura.'.$table);  
+    execute_sql($conn, 'create table if not exists sakura.'.$table);  
     $sql = 'alter table sakura.reply CONVERT TO CHARACTER SET utf8';
-    execute_sql_outside($conn, $sql);   
+    execute_sql($conn, $sql);   
 }
 
 function build_database_user($conn)
 {
     $sql = "CREATE USER 'web_user'@'localhost' ";
-    execute_sql_outside($conn, $sql);
+    execute_sql($conn, $sql);
     $sql = "GRANT select,insert,delete,update ON  sakura.* TO 'web_user'@'localhost'";
-    execute_sql_outside($conn, $sql);
+    execute_sql($conn, $sql);
 }
 
 function check_usrpsw($conn,$name,$psw)
@@ -215,6 +216,14 @@ function check_usrpsw($conn,$name,$psw)
     $row = mysqli_fetch_array($retval);
     if(!$row) return NULL;
     else return $row[0];
+}
+
+function init($conn)
+{
+    execute_sql($conn, 'drop database if exists sakura');
+    execute_sql($conn, 'create database sakura');
+    build_web_database($conn);
+    $_SESSION['uid'] = 0;
 }
 
 ?>

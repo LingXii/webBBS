@@ -28,7 +28,7 @@ include_once 'database_util.php';
         {
             $conn = connect_db('localhost', 'web_user', '');
             $str_uid = strval($_SESSION['uid']);
-            $nickname = qurey_one($conn,'user_nickname','sakura.user_info',
+            $nickname = query_one($conn,'user_nickname','sakura.user_info',
                     'user_id',$str_uid);
             echo '<a href="/user_space.php?uid='.$str_uid.'" class="topnav">'.$nickname.'</a>';
         }
