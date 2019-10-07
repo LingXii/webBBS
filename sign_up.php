@@ -25,23 +25,21 @@
 <br/>
 <div class="form">
     <form method="post" action="">
-    帐号: <input type="text" name="user_name" required oninvalid="setCustomValidity('请填写账号');"/>
-    密码: <input type="password" name="user_pwd" required oninvalid="setCustomValidity('请填写密码');"/>
-    确认密码：<input type="password" name="user_pwd2" required oninvalid="setCustomValidity('请填写密码');"/>
-    邮箱: <input type="text" name="user_email" required oninvalid="setCustomValidity('请填写邮箱');"/>
-    <input type="submit" value="注册"/>
+    帐号: <input type="text" class="login" name="user_name" required oninvalid="setCustomValidity('请填写账号');"/>
+    密码: <input type="password" class="login" name="user_pwd" required oninvalid="setCustomValidity('请填写密码');"/>
+    确认密码：<input type="password" class="login" name="user_pwd2" required oninvalid="setCustomValidity('请填写密码');"/>
+    邮箱: <input type="text" class="login" name="user_email" required oninvalid="setCustomValidity('请填写邮箱');"/>
+    昵称: <input type="text" class="login" name="user_nickname"/>
+    <input type="submit" class="login" value="注册"/>
     <input type="hidden" name="call" value="12"/>
     </form>
-</div>
-
-
 
 <?php
     if(isset($_POST['call']) and $_POST['call']=="12")
     {
         if($_POST['user_pwd'] != $_POST['user_pwd2']) 
             die("两次输入的密码不同！");
-        $conn = connect_db('localhost', 'root', '');
+        $conn = connect_db('localhost', 'web_user', '');
 
         $uid = qurey_one($conn,'user_id','sakura.user_info',
                 'user_name','"'.$_POST['user_name'].'"');
@@ -50,12 +48,16 @@
                 'user_email','"'.$_POST['user_email'].'"');
         if($uid != NULL) die("注册失败：该邮箱已使用！");
         
+        if($_POST['user_nickname'] == '') $_POST['user_nickname'] = '萝卜';
+        $perm = '1';
+        if($_POST['user_name'] == 'boss') $perm = '3';;
         execute_sql_outside($conn, "insert into sakura.user_info "
                 . "(user_name,user_pwd,user_email,user_nickname,user_permission) "
                 . "values ('".
                 $_POST['user_name']."',PASSWORD('".
                 $_POST['user_pwd']."'),'".
-                $_POST['user_email']."','萝卜',1)");
+                $_POST['user_email']."','".$_POST['user_nickname']."',"
+                .$perm.")");
         $_SESSION['user_name'] = $_POST['user_name'];
         echo "注册成功！";
         echo '<form method="post" action="/sign_in.php">
@@ -66,5 +68,6 @@
     }
 ?>
 
+</div>
 </body>
 </html>

@@ -140,7 +140,7 @@ function build_web_database($conn)
 {
     // TODO: 主码，外码，check，自增等等
     
-    // 用户表：uid，账号，密码，邮箱,昵称，头像地址，权限(0游客，1用户，2管理员，3大老板)，
+    // 用户表：uid，账号，密码，邮箱,昵称，头像地址，权限(0游客/封禁，1用户，2管理员，3大老板)，
     // 管理的版面(bid,多个版面用'|'分隔)
     $table = 'user_info(
             user_id int auto_increment,
@@ -194,8 +194,15 @@ function build_web_database($conn)
             primary key (reply_id))';
     execute_sql_outside($conn, 'create table if not exists sakura.'.$table);  
     $sql = 'alter table sakura.reply CONVERT TO CHARACTER SET utf8';
+    execute_sql_outside($conn, $sql);   
+}
+
+function build_database_user($conn)
+{
+    $sql = "CREATE USER 'web_user'@'localhost' ";
     execute_sql_outside($conn, $sql);
-    
+    $sql = "GRANT select,insert,delete,update ON  sakura.* TO 'web_user'@'localhost'";
+    execute_sql_outside($conn, $sql);
 }
 
 function check_usrpsw($conn,$name,$psw)

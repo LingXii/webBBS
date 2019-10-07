@@ -8,7 +8,7 @@ body {
     width: 100%;
 }    
     
-input[type=text], select {
+input[type=text].login, select {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -18,7 +18,7 @@ input[type=text], select {
     box-sizing: border-box;
 }
 
-input[type=password], select {
+input[type=password].login, select {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -28,7 +28,7 @@ input[type=password], select {
     box-sizing: border-box;
 }
 
-input[type=submit] {
+input[type=submit].login {
     width: 100%;
     background-color: #5d70dc;
     color: white;
@@ -39,7 +39,7 @@ input[type=submit] {
     cursor: pointer;
 }
 
-input[type=submit]:hover {
+input[type=submit].login:hover {
     background-color: #4459d4;
 }
 

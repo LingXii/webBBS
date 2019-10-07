@@ -26,11 +26,11 @@ include_once 'database_util.php';
         }
         else
         {
-            $conn = connect_db('localhost', 'root', '');
+            $conn = connect_db('localhost', 'web_user', '');
             $str_uid = strval($_SESSION['uid']);
             $nickname = qurey_one($conn,'user_nickname','sakura.user_info',
                     'user_id',$str_uid);
-            echo '<a href="/user_space.php?uid='.$str_uid.'">'.$nickname.'</a>';
+            echo '<a href="/user_space.php?uid='.$str_uid.'" class="topnav">'.$nickname.'</a>';
         }
     }
 ;?>

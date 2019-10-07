@@ -28,8 +28,6 @@
 ?>
 <p><font color="red">创建数据库或表时，数据库名和表名不要含有中文、空格；不要乱删库！</font></p>
 
-<br/>
-<div class="form">
 <form method="post" action="">
 <input type="submit" value="查看现有数据库" />
 <input type="hidden" name="call" value="3" />
@@ -81,7 +79,11 @@
 <input type="submit" value="创建网站数据库系统" />
 <input type="hidden" name="call" value="11" />
 </form>
-</div>
+
+<form method="post" action="">
+<input type="submit" value="创建网站数据库用户" />
+<input type="hidden" name="call" value="14" />
+</form>
 
 <?php
     // 每个按钮调用相应的函数(请把函数写到util文件里面)
@@ -96,6 +98,7 @@
         else if($_POST['call']=="9") show_tb_attr($conn,$_POST['tbname']);
         else if($_POST['call']=="10") execute_sql($conn,$_POST['sql']);
         else if($_POST['call']=="11") build_web_database($conn);
+        else if($_POST['call']=="14") build_database_user($conn);
     }
 ?>
 
