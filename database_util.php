@@ -129,6 +129,19 @@ function query_one($conn,$select,$from,$where_key,$where_value)
     else return $row[0];
 }
 
+function find($conn,$select,$from,$where_key,$where_value,$value)
+{   //查找是否存在符合条件的值
+    $sql = 'select '.$select.' from '.$from.' where '.$where_key.'='.$where_value;
+    $retval = mysqli_query($conn,$sql);
+    if(! $retval)
+        die("<br />查询失败：".mysqli_error($conn));
+    while($row = mysqli_fetch_array($retval))
+    {
+        if($value == $row[0]) return True;
+    }
+    return False;
+}
+
 function execute_sql($conn, $sql)
 {
     $retval = mysqli_query($conn,$sql);
@@ -141,8 +154,7 @@ function build_web_database($conn)
 {
     // TODO: 主码，外码，check，自增等等
     
-    // 用户表：uid，账号，密码，邮箱,昵称，头像地址，权限(0游客/封禁，1用户，2管理员，3大老板)，
-    // 管理的版面(bid,多个版面用'|'分隔)
+    // 用户表：uid，账号，密码，邮箱,昵称，头像地址，权限(0游客/封禁，1用户，2管理员，3大老板)
     $table = 'user_info(
             user_id int auto_increment,
             user_name varchar(32) unique,
@@ -151,24 +163,41 @@ function build_web_database($conn)
             user_nickname varchar(32),
             user_headpic_url varchar(256),                
             user_permission int,
-            user_admin_board varchar(512),
             primary key (user_id))';
     execute_sql($conn, 'create table if not exists sakura.'.$table);
     $sql = 'alter table sakura.user_info CONVERT TO CHARACTER SET utf8';
+    execute_sql($conn, $sql);
+    $sql = "insert into sakura.user_info "
+        . "(user_name,user_pwd,user_email,user_nickname,user_permission) "
+        . "values ('boss', PASSWORD('boss'), 'boss@x.com', '博士', 3)";
     execute_sql($conn, $sql);
     
     // 版面表：bid（1为总版面），名称，管理员(uid,多个管理员用'|'分隔)
     $table = 'board(
             board_id int auto_increment,
-            board_name varchar(16) unique,
-            board_admin varchar(512),
+            board_name varchar(32) unique,
             primary key (board_id))';
     execute_sql($conn, 'create table if not exists sakura.'.$table);
     $sql = 'alter table sakura.board CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
+    $sql = "insert into sakura.board (board_name) value ('所有版面')";
+    execute_sql($conn, $sql);
+    
+    // 版面管理表：bid（1为总版面），管理员(uid)
+    $table = 'manage(
+            bid int,
+            uid int,
+            foreign key(bid) references sakura.board(board_id) on delete cascade,
+            foreign key(uid) references sakura.user_info(user_id) on delete cascade)';
+    execute_sql($conn, 'create table if not exists sakura.'.$table);
+    $sql = 'alter table sakura.board CONVERT TO CHARACTER SET utf8';
+    execute_sql($conn, $sql);
+    $sql = "insert into sakura.manage (bid,uid) value (1,1)";
+    execute_sql($conn, $sql);
     
     // 帖子表：pid，标题，所属版面，发帖用户，创建时间，更新时间，
-    // 内容(检测越界，内容过多则用文件储存，数据库放文件路径)，状态(1正常，2违规，3不可回复)
+    // 内容(检测越界，内容过多则用文件储存，数据库放文件路径)，
+    // 状态(1正常，2违规锁定，3不可回复, 4置顶可回复，5置顶不可回复)
     $table = 'posts(
             post_id int auto_increment,
             post_title varchar(128),
@@ -178,7 +207,9 @@ function build_web_database($conn)
             post_updatetime datetime,
             post_content varchar(16384),
             post_state int,
-            primary key (post_id))';
+            primary key (post_id),
+            foreign key(post_bid) references sakura.board(board_id) on delete cascade,
+            foreign key(post_uid) references sakura.user_info(user_id) on delete cascade)';
     execute_sql($conn, 'create table if not exists sakura.'.$table);
     $sql = 'alter table sakura.posts CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
@@ -192,7 +223,9 @@ function build_web_database($conn)
             reply_createtime datetime,
             reply_content varchar(16384), 
             reply_state int,
-            primary key (reply_id))';
+            primary key (reply_id),
+            foreign key(reply_pid) references sakura.posts(post_id) on delete cascade,
+            foreign key(reply_uid) references sakura.user_info(user_id) on delete cascade)';
     execute_sql($conn, 'create table if not exists sakura.'.$table);  
     $sql = 'alter table sakura.reply CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);   

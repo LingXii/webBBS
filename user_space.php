@@ -25,16 +25,16 @@
     if(!isset($_GET['uid'])) die("拒绝访问！");
     $conn = connect_db('localhost','web_user','');
     $str_uid = strval($_GET['uid']);
-    if(qurey_one($conn,'user_id','sakura.user_info','user_id', $str_uid) == NULL)
+    if(query_one($conn,'user_id','sakura.user_info','user_id', $str_uid) == NULL)
         die("查无此人！");
 ?>
 
 <?php 
     $conn = connect_db('localhost', 'web_user', '');
     $str_uid = strval($_GET['uid']);
-    $user_name = qurey_one($conn,'user_name','sakura.user_info',
+    $user_name = query_one($conn,'user_name','sakura.user_info',
             'user_id',$str_uid);
-    $nickname = qurey_one($conn,'user_nickname','sakura.user_info',
+    $nickname = query_one($conn,'user_nickname','sakura.user_info',
             'user_id',$str_uid);
     echo '<p><font color="red">'.$nickname.'的个人主页</font></p>';
     echo '<p>账号：'.$user_name.'</p>';
@@ -42,7 +42,7 @@
     
     if($_SESSION['uid'] == $_GET['uid'])
     {
-        $email = qurey_one($conn,'user_email','sakura.user_info',
+        $email = query_one($conn,'user_email','sakura.user_info',
             'user_id',$str_uid);
         echo '<p>邮箱：'.$email.'</p>';
     }
@@ -52,6 +52,10 @@
 <input type="submit" value="退出登录" />
 <input type="hidden" name="call" value="15" />
 </form>
+    
+<a href="/board_manage.php">
+    <?php echo '版面管理';?>
+</a>
     
 <?php
 if(isset($_POST['call']))

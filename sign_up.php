@@ -50,8 +50,7 @@
         
         if($_POST['user_nickname'] == '') $_POST['user_nickname'] = '萝卜';
         $perm = '1';
-        if($_POST['user_name'] == 'boss') $perm = '3';;
-        execute_sql_outside($conn, "insert into sakura.user_info "
+        execute_sql($conn, "insert into sakura.user_info "
                 . "(user_name,user_pwd,user_email,user_nickname,user_permission) "
                 . "values ('".
                 $_POST['user_name']."',PASSWORD('".
