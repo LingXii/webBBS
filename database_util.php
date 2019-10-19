@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Shanghai');
 
 function connect_db($host,$user_name,$password)
 {
@@ -163,7 +164,7 @@ function build_web_database($conn)
             user_nickname varchar(32),
             user_headpic_url varchar(256),                
             user_permission int,
-            primary key (user_id))';
+            primary key (user_id)) ENGINE=InnoDB;';
     execute_sql($conn, 'create table if not exists sakura.'.$table);
     $sql = 'alter table sakura.user_info CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
@@ -176,7 +177,7 @@ function build_web_database($conn)
     $table = 'board(
             board_id int auto_increment,
             board_name varchar(32) unique,
-            primary key (board_id))';
+            primary key (board_id)) ENGINE=InnoDB;';
     execute_sql($conn, 'create table if not exists sakura.'.$table);
     $sql = 'alter table sakura.board CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
@@ -188,7 +189,7 @@ function build_web_database($conn)
             bid int,
             uid int,
             foreign key(bid) references sakura.board(board_id) on delete cascade,
-            foreign key(uid) references sakura.user_info(user_id) on delete cascade)';
+            foreign key(uid) references sakura.user_info(user_id) on delete cascade) ENGINE=InnoDB;';
     execute_sql($conn, 'create table if not exists sakura.'.$table);
     $sql = 'alter table sakura.board CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
@@ -203,13 +204,13 @@ function build_web_database($conn)
             post_title varchar(128),
             post_bid int,
             post_uid int,
-            post_createtime datetime,
-            post_updatetime datetime,
+            post_createtime bigint,
+            post_updatetime bigint,
             post_content varchar(16384),
             post_state int,
             primary key (post_id),
             foreign key(post_bid) references sakura.board(board_id) on delete cascade,
-            foreign key(post_uid) references sakura.user_info(user_id) on delete cascade)';
+            foreign key(post_uid) references sakura.user_info(user_id) on delete cascade) ENGINE=InnoDB;';
     execute_sql($conn, 'create table if not exists sakura.'.$table);
     $sql = 'alter table sakura.posts CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
@@ -220,12 +221,12 @@ function build_web_database($conn)
             reply_id int auto_increment,
             reply_uid int,
             reply_pid int,
-            reply_createtime datetime,
+            reply_createtime bigint,
             reply_content varchar(16384), 
             reply_state int,
             primary key (reply_id),
             foreign key(reply_pid) references sakura.posts(post_id) on delete cascade,
-            foreign key(reply_uid) references sakura.user_info(user_id) on delete cascade)';
+            foreign key(reply_uid) references sakura.user_info(user_id) on delete cascade) ENGINE=InnoDB;';
     execute_sql($conn, 'create table if not exists sakura.'.$table);  
     $sql = 'alter table sakura.reply CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);   

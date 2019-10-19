@@ -60,6 +60,7 @@ if(isset($_POST['call']))
     if($_POST['call']=="1") page_reset();
     else if($_POST['call']=="2") db_connect($_POST['dbhost'],
         $_POST['dbuser'],$_POST['dbpass']);
+    array_splice($_POST, 0, count($_POST));
 }
 ?>
 
