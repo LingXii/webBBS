@@ -45,6 +45,20 @@
         $email = query_one($conn,'user_email','sakura.user_info',
             'user_id',$str_uid);
         echo '<p>邮箱：'.$email.'</p>';
+        
+        echo '<p>管理的版面：';
+        $sql = "SELECT bid FROM sakura.manage WHERE uid = ".strval($_SESSION['uid']);
+        $bid_val = mysqli_query($conn,$sql);
+        $first_in = TRUE;
+        while($bid_row = mysqli_fetch_array($bid_val))
+        {
+            if(!$first_in) echo ",";
+            $first_in = False;
+            $str_bid = strval($bid_row[0]);
+            $boardname = query_one($conn,'board_name','sakura.board','board_id',$str_bid);
+            echo '<a href="/post_manage.php?bid='.$str_bid.'">'.$boardname.'</a>';
+        }
+        echo '</p>';
     }
 ?>
     
@@ -52,10 +66,6 @@
 <input type="submit" value="退出登录" />
 <input type="hidden" name="call" value="15" />
 </form>
-    
-<a href="/board_manage.php">
-    <?php echo '版面管理';?>
-</a>
     
 <?php
 if(isset($_POST['call']))

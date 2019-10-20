@@ -189,12 +189,13 @@ function build_web_database($conn)
             bid int,
             uid int,
             foreign key(bid) references sakura.board(board_id) on delete cascade,
-            foreign key(uid) references sakura.user_info(user_id) on delete cascade) ENGINE=InnoDB;';
+            foreign key(uid) references sakura.user_info(user_id) on delete cascade,
+            constraint unique_cond UNIQUE (bid,uid)) ENGINE=InnoDB;';
     execute_sql($conn, 'create table if not exists sakura.'.$table);
     $sql = 'alter table sakura.board CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
     $sql = "insert into sakura.manage (bid,uid) value (1,1)";
-    execute_sql($conn, $sql);
+    execute_sql($conn, $sql);   
     
     // 帖子表：pid，标题，所属版面，发帖用户，创建时间，更新时间，
     // 内容(检测越界，内容过多则用文件储存，数据库放文件路径)，
