@@ -39,8 +39,8 @@
         {
             $conn = connect_db('localhost', 'web_user', '');
             $time = strval(time());
-            $state = '4';
-            if(isset($_POST['replyable'])) $state = '5';
+            $state = '1';
+            if(isset($_POST['replyable'])) $state = '3';
             $sql = "insert into sakura.posts (post_title,post_bid,post_uid,post_createtime,post_updatetime,"
                     ."post_content,post_state) value ('".$_POST['title']."',".$str_bid.",".$_SESSION['uid']
                     .",".$time.",".$time.",'".$_POST['content']."',".$state.")";
