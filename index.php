@@ -55,16 +55,34 @@
 <br />
 <div>
 <?php
-$sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$str_bid." ORDER BY post_id ASC";
-$post_val = mysqli_query($conn,$sql);
-if(! $post_val)
-die("查询数据库失败：".mysqli_error($conn));
-
 echo '<table border="1"><tr>';
 echo '<td><b>帖子主题</b></td>';
 echo '<td><b>发帖用户</b></td>';
 echo '<td><b>发帖时间</b></td>';
+echo '<td><b>最新回复时间</b></td>';
 echo '</tr>';
+
+$sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$str_bid." AND post_state >= 4 ORDER BY post_updatetime DESC";
+$post_val = mysqli_query($conn,$sql);
+if(! $post_val)
+die("查询数据库失败：".mysqli_error($conn));
+while($row = mysqli_fetch_array($post_val))
+{
+    $str_pid = strval($row[0]);
+    echo '<tr>';
+    echo '<td><a href="/post_reader.php?pid='.$str_pid.'"><font color="red">'.$row[1].'</font></a></td>';
+    $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',strval($row[3]));
+    echo '<td><a href="/user_space.php?uid='.strval($row[3]).'">'.$user_nickname.'</a></td>';
+    $createtime = date('Y-n-j H:i:s',$row[4]);
+    echo '<td>'.$createtime.'</td>';
+    $updatetime = date('Y-n-j H:i:s',$row[5]);
+    echo '<td>'.$updatetime.'</td>';
+    echo '</tr>';      
+}
+$sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$str_bid." AND post_state <= 3 AND post_state <> 2 ORDER BY post_updatetime DESC";
+$post_val = mysqli_query($conn,$sql);
+if(! $post_val)
+die("查询数据库失败：".mysqli_error($conn));
 while($row = mysqli_fetch_array($post_val))
 {
     $str_pid = strval($row[0]);
@@ -74,6 +92,8 @@ while($row = mysqli_fetch_array($post_val))
     echo '<td><a href="/user_space.php?uid='.strval($row[3]).'">'.$user_nickname.'</a></td>';
     $createtime = date('Y-n-j H:i:s',$row[4]);
     echo '<td>'.$createtime.'</td>';
+    $updatetime = date('Y-n-j H:i:s',$row[5]);
+    echo '<td>'.$updatetime.'</td>';
     echo '</tr>';      
 }
 echo '</table>';
