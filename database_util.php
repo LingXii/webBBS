@@ -197,7 +197,7 @@ function build_web_database($conn)
     $sql = "insert into sakura.manage (bid,uid) value (1,1)";
     execute_sql($conn, $sql);   
     
-    // 帖子表：pid，标题，所属版面，发帖用户，创建时间，更新时间(编辑或最迟回复时间)，
+    // 帖子表：pid，标题，所属版面，发帖用户，创建时间，更新时间(最迟回复时间)，
     // 内容(检测越界，内容过多则用文件储存，数据库放文件路径)，
     // 状态(1正常，2违规锁定，3不可回复, 4置顶可回复，5置顶不可回复)
     $table = 'posts(

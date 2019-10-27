@@ -17,14 +17,14 @@
     include_once 'database_util.php';
 ?>
 <?php 
-    $str_bid = 1;
-    if(isset($_GET['bid'])) $str_bid = strval($_GET['bid']);
+    $bid = 1;
+    if(isset($_GET['bid'])) $bid = $_GET['bid'];
     $conn = connect_db('localhost', 'web_user', '');
     $boardname = query_one($conn,'board_name','sakura.board',
-            'board_id',$str_bid);
+            'board_id',$bid);
     if($boardname == NULL) die("版面不存在！"); 
     $title="Sakura 版面：".$boardname;
-    if($str_bid == 1) $title="Sakura";
+    if($bid == 1) $title="Sakura";
     $show_buttons = TRUE;
 ?>
 <?php 
@@ -38,16 +38,16 @@
         if($_POST['call']=="31")
         {
             $conn = connect_db('localhost', 'web_user', '');
-            $time = strval(time());
+            $time = time();
             $state = '1';
             if(isset($_POST['replyable'])) $state = '3';
             $sql = "insert into sakura.posts (post_title,post_bid,post_uid,post_createtime,post_updatetime,"
-                    ."post_content,post_state) value ('".$_POST['title']."',".$str_bid.",".$_SESSION['uid']
+                    ."post_content,post_state) value ('".$_POST['title']."',".$bid.",".$_SESSION['uid']
                     .",".$time.",".$time.",'".$_POST['content']."',".$state.")";
             execute_sql($conn, $sql);
         }
         array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
-        header('Location: index.php?bid='.$str_bid);
+        header('Location: index.php?bid='.$bid);
     }
 ?>
 </div>
@@ -62,34 +62,32 @@ echo '<td><b>发帖时间</b></td>';
 echo '<td><b>最新回复时间</b></td>';
 echo '</tr>';
 
-$sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$str_bid." AND post_state >= 4 ORDER BY post_updatetime DESC";
+$sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state >= 4 ORDER BY post_updatetime DESC";
 $post_val = mysqli_query($conn,$sql);
 if(! $post_val)
 die("查询数据库失败：".mysqli_error($conn));
 while($row = mysqli_fetch_array($post_val))
 {
-    $str_pid = strval($row[0]);
     echo '<tr>';
-    echo '<td><a href="/post_reader.php?pid='.$str_pid.'"><font color="red">'.$row[1].'</font></a></td>';
-    $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',strval($row[3]));
-    echo '<td><a href="/user_space.php?uid='.strval($row[3]).'">'.$user_nickname.'</a></td>';
+    echo '<td><a href="/post_reader.php?pid='.$row[0].'"><font color="red">'.$row[1].'</font></a></td>';
+    $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
+    echo '<td><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
     $createtime = date('Y-n-j H:i:s',$row[4]);
     echo '<td>'.$createtime.'</td>';
     $updatetime = date('Y-n-j H:i:s',$row[5]);
     echo '<td>'.$updatetime.'</td>';
     echo '</tr>';      
 }
-$sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$str_bid." AND post_state <= 3 AND post_state <> 2 ORDER BY post_updatetime DESC";
+$sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state <= 3 AND post_state <> 2 ORDER BY post_updatetime DESC";
 $post_val = mysqli_query($conn,$sql);
 if(! $post_val)
 die("查询数据库失败：".mysqli_error($conn));
 while($row = mysqli_fetch_array($post_val))
 {
-    $str_pid = strval($row[0]);
     echo '<tr>';
-    echo '<td><a href="/post_reader.php?pid='.$str_pid.'">'.$row[1].'</a></td>';
-    $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',strval($row[3]));
-    echo '<td><a href="/user_space.php?uid='.strval($row[3]).'">'.$user_nickname.'</a></td>';
+    echo '<td><a href="/post_reader.php?pid='.$row[0].'">'.$row[1].'</a></td>';
+    $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
+    echo '<td><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
     $createtime = date('Y-n-j H:i:s',$row[4]);
     echo '<td>'.$createtime.'</td>';
     $updatetime = date('Y-n-j H:i:s',$row[5]);
@@ -103,7 +101,7 @@ echo '</table>';
 <br />
 <div>
 <?php
-if($str_bid == 1)
+if($bid == 1)
 {
     $sql = "SELECT * FROM sakura.board ORDER BY board_id ASC";
     $board_val = mysqli_query($conn,$sql);
@@ -116,9 +114,9 @@ if($str_bid == 1)
     echo '</tr>';
     while($row = mysqli_fetch_array($board_val))
     {
-        $str_bid_ = strval($row[0]);
+        $bid_ = strval($row[0]);
         echo '<tr>';
-        echo '<td><a href="/index.php?bid='.$str_bid_.'">'.$row[1].'</a></td>';
+        echo '<td><a href="/index.php?bid='.$bid_.'">'.$row[1].'</a></td>';
 
         $sql = "SELECT uid FROM sakura.manage WHERE bid = ".strval($row[0]);
         $uid_val = mysqli_query($conn,$sql);
@@ -148,7 +146,7 @@ if($str_bid == 1)
 <br />
 <div>
 <?php
-if($str_bid > 1 && $_SESSION['uid'] != 0)
+if($bid > 1 && $_SESSION['uid'] != 0)
 {
     echo '<form method="post" action="">'.
         '帖子标题<input type="text" name="title" required oninvalid="setCustomValidity('."'不可为空'".');" oninput="setCustomValidity('."''".')"/>'.
