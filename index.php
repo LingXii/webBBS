@@ -55,20 +55,21 @@
 <br />
 <div>
 <?php
-echo '<table border="1"><tr>';
-echo '<td><b>帖子主题</b></td>';
-echo '<td><b>发帖用户</b></td>';
-echo '<td><b>发帖时间</b></td>';
-echo '<td><b>最新回复时间</b></td>';
+echo '<table border="1" id="posts"><tr>';
+echo '<th><b>帖子主题</b></th>';
+echo '<th><b>发帖用户</b></th>';
+echo '<th><b>发帖时间</b></th>';
+echo '<th><b>最新回复时间</b></th>';
 echo '</tr>';
 
 $sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state >= 4 ORDER BY post_updatetime DESC";
 $post_val = mysqli_query($conn,$sql);
-if(! $post_val)
-die("查询数据库失败：".mysqli_error($conn));
+if(! $post_val) die("查询数据库失败：".mysqli_error($conn));
+$row_cnt = 1;
 while($row = mysqli_fetch_array($post_val))
 {
-    echo '<tr>';
+    if($row_cnt%2 == 0) echo '<tr class="posteven">';
+    else echo '<tr class="postodd">';
     echo '<td><a href="/post_reader.php?pid='.$row[0].'"><font color="red">'.$row[1].'</font></a></td>';
     $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
     echo '<td><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
@@ -76,15 +77,17 @@ while($row = mysqli_fetch_array($post_val))
     echo '<td>'.$createtime.'</td>';
     $updatetime = date('Y-n-j H:i:s',$row[5]);
     echo '<td>'.$updatetime.'</td>';
-    echo '</tr>';      
+    echo '</tr>';  
+    $row_cnt += 1;    
 }
 $sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state <= 3 AND post_state <> 2 ORDER BY post_updatetime DESC";
 $post_val = mysqli_query($conn,$sql);
-if(! $post_val)
-die("查询数据库失败：".mysqli_error($conn));
+if(! $post_val) die("查询数据库失败：".mysqli_error($conn));
+
 while($row = mysqli_fetch_array($post_val))
 {
-    echo '<tr>';
+    if($row_cnt%2 == 0) echo '<tr class="posteven">';
+    else echo '<tr class="postodd">';
     echo '<td><a href="/post_reader.php?pid='.$row[0].'">'.$row[1].'</a></td>';
     $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
     echo '<td><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
@@ -92,7 +95,8 @@ while($row = mysqli_fetch_array($post_val))
     echo '<td>'.$createtime.'</td>';
     $updatetime = date('Y-n-j H:i:s',$row[5]);
     echo '<td>'.$updatetime.'</td>';
-    echo '</tr>';      
+    echo '</tr>';   
+    $row_cnt += 1;
 }
 echo '</table>';
 ?>

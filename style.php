@@ -89,4 +89,41 @@ a.topnav:hover {
     color: black;
 }
 
+#posts
+{
+    width:100%;
+    border-collapse:collapse;
+}
+#posts td, #posts th 
+{
+    font-size:1em;
+    border:1px solid #ffffff;
+    padding:15px 7px;
+}
+#posts th 
+{
+    font-size:1.2em;
+    text-align:left;
+    padding-top:10px;
+    padding-bottom:10px;
+    background-color:#00158c;
+    color:#ffffff;
+}
+#posts td 
+{
+    font-size:1em;
+    text-align:left;
+    color:#000000;
+}
+#posts tr.postodd 
+{
+    color:#000000;
+    background-color:#eaedff;
+}
+#posts tr.posteven 
+{
+    color:#000000;
+    background-color:#ced6ff;
+}
+
 </style>
