@@ -15,13 +15,13 @@
 ## database_util.php
 数据库操作的常用函数。
 
-'''query one''' 在指定数据表中查询满足条件的唯一条目。
+```query one``` 在指定数据表中查询满足条件的唯一条目。
 
-'''find''' 在指定数据表中查找是否存在符合条件的条目，返回True或False.
+```find``` 在指定数据表中查找是否存在符合条件的条目，返回True或False.
 
-'''execute_sql''' 执行一条sql语句。
+```execute_sql``` 执行一条sql语句。
 
-'''build_web_database''' 网站数据库定义与初始化。
+```build_web_database``` 网站数据库定义与初始化。
 
 ## sign_up.php
 用户注册页面，包含一个注册表和一个注册函数。
