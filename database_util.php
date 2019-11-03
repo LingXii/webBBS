@@ -1,5 +1,6 @@
 <?php
 date_default_timezone_set('Asia/Shanghai');
+$conn = connect_db('localhost', 'web_user', '');
 
 function connect_db($host,$user_name,$password)
 {
@@ -148,14 +149,15 @@ function execute_sql($conn, $sql)
     $retval = mysqli_query($conn,$sql);
     if(! $retval)
         die("<br />语句执行错误：".mysqli_error($conn));
-    echo "<br />执行语句成功：".$sql;
+    #echo "<br />执行语句成功：".$sql;
+    return $retval;
 }
 
 function build_web_database($conn)
 {
     // TODO: 主码，外码，check，自增等等
     
-    // 用户表：uid，账号，密码，邮箱,昵称，头像地址，权限(0游客/封禁，1用户，2管理员，3大老板)
+    // 用户表：uid，账号，密码，邮箱，昵称，头像地址，权限(0游客/封禁，1用户，2管理员，3大老板)
     $table = 'user_info(
             user_id int auto_increment,
             user_name varchar(32) unique,
@@ -165,12 +167,19 @@ function build_web_database($conn)
             user_headpic_url varchar(256),                
             user_permission int,
             primary key (user_id)) ENGINE=InnoDB;';
-    execute_sql($conn, 'create table if not exists sakura.'.$table);
-    $sql = 'alter table sakura.user_info CONVERT TO CHARACTER SET utf8';
+    execute_sql($conn, 'CREATE table if not exists sakura.'.$table);
+    $sql = 'ALTER table sakura.user_info CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
-    $sql = "insert into sakura.user_info "
-        . "(user_name,user_pwd,user_email,user_nickname,user_permission) "
-        . "values ('boss', PASSWORD('boss'), 'boss@x.com', '博士', 3)";
+    $sql = "INSERT into sakura.user_info (user_name,user_pwd,user_email,user_nickname,user_permission) 
+            values ('boss', PASSWORD('boss'), 'boss@x.com', '博士', 3),
+                    ('bokoblin', PASSWORD('bokoblin'), 'bokoblin@zelda.com', '猪', 1),
+                    ('moblin', PASSWORD('moblin'), 'moblin@zelda.com', '莫布林', 1),
+                    ('pikachu', PASSWORD('pikachu'), 'pikachu@pokemon.com', '电气老鼠', 1),
+                    ('akie', PASSWORD('akie'), 'akie@utami.com', 'Akie秋绘', 1),
+                    ('momo', PASSWORD('momo'), 'momo@omyoji.com', '桃花花', 1),
+                    ('yousa', PASSWORD('yousa'), 'yousa@utami.com', '冷鸟yousa', 1),
+                    ('kirlia', PASSWORD('kirlia'), 'kirlia@pokemon.com', 'Lovely', 1),
+                    ('yuki', PASSWORD('yuki'), 'yuki@omyoji.com', '冻住不许走', 1);";
     execute_sql($conn, $sql);
     
     // 版面表：bid（1为总版面），名称
@@ -178,10 +187,11 @@ function build_web_database($conn)
             board_id int auto_increment,
             board_name varchar(32) unique,
             primary key (board_id)) ENGINE=InnoDB;';
-    execute_sql($conn, 'create table if not exists sakura.'.$table);
-    $sql = 'alter table sakura.board CONVERT TO CHARACTER SET utf8';
+    execute_sql($conn, 'CREATE table if not exists sakura.'.$table);
+    $sql = 'ALTER table sakura.board CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
-    $sql = "insert into sakura.board (board_name) value ('所有版面')";
+    $sql = "INSERT into sakura.board (board_name) 
+            value ('所有版面'), ('旷野之息'), ('宝可梦'), ('唱见'), ('痒痒鼠');";
     execute_sql($conn, $sql);
     
     // 版面管理表：bid（1为总版面），管理员(uid)
@@ -191,10 +201,11 @@ function build_web_database($conn)
             foreign key(bid) references sakura.board(board_id) on delete cascade,
             foreign key(uid) references sakura.user_info(user_id) on delete cascade,
             constraint unique_cond UNIQUE (bid,uid)) ENGINE=InnoDB;';
-    execute_sql($conn, 'create table if not exists sakura.'.$table);
-    $sql = 'alter table sakura.board CONVERT TO CHARACTER SET utf8';
+    execute_sql($conn, 'CREATE table if not exists sakura.'.$table);
+    $sql = 'ALTER table sakura.board CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
-    $sql = "insert into sakura.manage (bid,uid) value (1,1)";
+    $sql = "INSERT into sakura.manage (bid,uid) 
+            value (1,1), (2,2), (3,4), (4,5), (5,6)";
     execute_sql($conn, $sql);   
     
     // 帖子表：pid，标题，所属版面，发帖用户，创建时间，更新时间(最迟回复时间)，
@@ -212,8 +223,15 @@ function build_web_database($conn)
             primary key (post_id),
             foreign key(post_bid) references sakura.board(board_id) on delete cascade,
             foreign key(post_uid) references sakura.user_info(user_id) on delete cascade) ENGINE=InnoDB;';
-    execute_sql($conn, 'create table if not exists sakura.'.$table);
-    $sql = 'alter table sakura.posts CONVERT TO CHARACTER SET utf8';
+    execute_sql($conn, 'CREATE table if not exists sakura.'.$table);
+    $sql = 'ALTER table sakura.posts CONVERT TO CHARACTER SET utf8';
+    execute_sql($conn, $sql);
+    $sql = "INSERT into sakura.posts (post_title, post_bid, post_uid, post_createtime, post_updatetime, post_content, post_state) 
+            values ('净网倡议', 1, 1, 10000000, 10000000, '大家注意下别搞黄色。', 4),
+                    ('别再欺负猪猪了！', 2, 2, 10001234, 10001234, '猪猪活得很艰难，猪猪心很累。', 1),
+                    ('有能耐把我删了', 3, 4, 10005000, 10005000, '听说剑盾要删一批幸运儿么，不知道有没有我，好紧张啊(=^ ^=)', 1),
+                    ('吹爆绘总', 4, 7, 10010010, 10010010, '啊绘总唱歌太好听了，我冷鸟吹爆！', 1),
+                    ('莫布林的水帖', 2, 3, 10017000, 10017000, '刚好五个字', 1);";
     execute_sql($conn, $sql);
                 
     // 回复表：rid，发回复的用户，所属帖子，回复时间，
@@ -228,9 +246,38 @@ function build_web_database($conn)
             primary key (reply_id),
             foreign key(reply_pid) references sakura.posts(post_id) on delete cascade,
             foreign key(reply_uid) references sakura.user_info(user_id) on delete cascade) ENGINE=InnoDB;';
-    execute_sql($conn, 'create table if not exists sakura.'.$table);  
-    $sql = 'alter table sakura.reply CONVERT TO CHARACTER SET utf8';
-    execute_sql($conn, $sql);   
+    execute_sql($conn, 'CREATE table if not exists sakura.'.$table);  
+    $sql = 'ALTER table sakura.reply CONVERT TO CHARACTER SET utf8';
+    execute_sql($conn, $sql);
+    $sql = "INSERT into sakura.reply (reply_uid, reply_pid, reply_createtime, reply_content, reply_state) 
+            values (5, 4, 10012000, '啊谢谢冷鸟捧场w', 1),
+                    (9, 5, 10018888, '我也水水经验', 1),
+                    (2, 5, 10020000, '每日水一水', 1);";
+    execute_sql($conn, $sql);
+
+    // 私信
+    // state 0=正常 1=sender删除 2=receiver删除 3=双方删除
+    $table = 'message(
+            msg_id int auto_increment,
+            msg_sender int,
+            msg_receiver int,
+            msg_time bigint,
+            msg_content varchar(1024),
+            msg_state int,
+            primary key (msg_id),
+            foreign key (msg_sender) references sakura.user_info(user_id) on delete cascade,
+            foreign key (msg_receiver) references sakura.user_info(user_id) on delete cascade)';
+    execute_sql($conn, 'CREATE table sakura.'.$table);
+    $sql = 'ALTER table sakura.message CONVERT TO CHARACTER SET utf8';
+    execute_sql($conn, $sql);
+    $sql = "INSERT into sakura.message 
+            (msg_sender,msg_receiver,msg_time,msg_content,msg_state) 
+            values (1, 2, 100022, 'hello', 0),
+            (2, 1, 100031, 'hi. how are you?', 0),
+            (1, 2, 100045, 'i\'m fine, and you?', 0),
+            (2, 1, 100062, 'i\'m die.', 0),
+            (3, 1, 123456, 'awsl', 0);";
+    execute_sql($conn, $sql);
 }
 
 function build_database_user($conn)
@@ -255,8 +302,8 @@ function check_usrpsw($conn,$name,$psw)
 
 function init($conn)
 {
-    execute_sql($conn, 'drop database if exists sakura');
-    execute_sql($conn, 'create database sakura');
+    execute_sql($conn, 'DROP database if exists sakura');
+    execute_sql($conn, 'CREATE database sakura');
     build_web_database($conn);
     $_SESSION['uid'] = 0;
 }

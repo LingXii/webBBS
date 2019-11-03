@@ -20,7 +20,6 @@
     if(!isset($_GET['pid'])) die("拒绝访问！");
     $title="Sakura";
     $show_buttons = TRUE;
-    $conn = connect_db('localhost', 'web_user', '');
     $post_title = query_one($conn,'post_title','sakura.posts','post_id',$_GET['pid']);
     if($post_title == NULL) die("帖子不存在！");
 ?>
@@ -34,7 +33,6 @@
     {
         if($_POST['call']=="32")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             $time = time();
             $state = '1';
             $sql = "insert into sakura.reply (reply_uid,reply_pid,reply_createtime,reply_content,reply_state) "

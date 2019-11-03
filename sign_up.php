@@ -80,7 +80,6 @@
                 echo '<font color="red">两次输入的密码不同！</font>';
                 break;
             }
-            $conn = connect_db('localhost', 'web_user', '');
 
             $uid = query_one($conn,'user_id','sakura.user_info',
                     'user_name','"'.$_POST['user_name'].'"');

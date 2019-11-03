@@ -19,7 +19,6 @@
 <?php 
     if(!isset($_GET['bid'])) die("拒绝访问！");
     if($_GET['bid']==1) header('Location: board_manage.php');
-    $conn = connect_db('localhost', 'web_user', '');
     $str_bid = strval($_GET['bid']);
     $boardname = query_one($conn,'board_name','sakura.board',
             'board_id',$str_bid);
@@ -31,7 +30,6 @@
     include 'header.php';
 ?>  
 <?php 
-    $conn = connect_db('localhost', 'web_user', '');
     $str_uid = strval($_SESSION['uid']);   
     if(!find($conn,'uid','sakura.manage','bid','1',$_SESSION['uid']) && 
         !find($conn,'uid','sakura.manage','bid',$str_bid,$_SESSION['uid']))
@@ -54,12 +52,10 @@
     {
         if($_POST['call']=="25")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             execute_sql($conn, "UPDATE sakura.board SET board_name = '".$_POST['pid']."' WHERE board_id = ".$_GET['bid']);
         }
         else if($_POST['call']=="26")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             $time = strval(time());
             $state = '4';
             if(isset($_POST['replyable'])) $state = '5';
@@ -70,7 +66,6 @@
         }
         else if($_POST['call']=="27")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             $old_state = query_one($conn,'post_state','sakura.posts','post_id',$_POST['pid']);
             $new_state = 1;
             switch($old_state)
@@ -84,7 +79,6 @@
         }
         else if($_POST['call']=="28")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             $old_state = query_one($conn,'post_state','sakura.posts','post_id',$_POST['pid']);
             $new_state = 1;
             switch($old_state)
@@ -98,7 +92,6 @@
         }
         else if($_POST['call']=="29")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             $old_state = query_one($conn,'post_state','sakura.posts','post_id',$_POST['pid']);
             $new_state = 1;
             if($old_state != 2) $new_state = 2;
@@ -106,7 +99,6 @@
         }
         else if($_POST['call']=="30")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             execute_sql($conn, "DELETE FROM sakura.posts WHERE post_id = ".$_POST['pid']);
         }
         array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单

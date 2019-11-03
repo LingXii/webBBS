@@ -24,5 +24,11 @@ Name: <input type="text" name="usr_name" required="required" />
     <input type="submit" value="">
 </form>
 
+<?php
+    $timestamp = 3611;
+    echo date('YmdHis', $timestamp);
+    echo 'aaa aaa';
+?>
+
 </body>
 </html>

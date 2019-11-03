@@ -23,7 +23,6 @@
 ?>
     
 <?php 
-    $conn = connect_db('localhost', 'web_user', '');
     $str_uid = strval($_SESSION['uid']);   
     if(! find($conn,'uid','sakura.manage','bid','1',$_SESSION['uid']))
         die("访问错误：权限不足");
@@ -45,19 +44,16 @@
     {
         if($_POST['call']=="16")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             execute_sql($conn, "insert into sakura.board (board_name) value ('"
                     .$_POST['board_name']."')");
         }
         else if($_POST['call']=="17")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             execute_sql($conn, "DELETE FROM sakura.manage WHERE bid = "
                     .$_POST['bid']." AND uid = ".$_POST['uid']);
         }
         else if($_POST['call']=="18")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             if(! find($conn,'user_id','sakura.user_info','user_id',$_POST['uid'],$_POST['uid']))
                 die("不存在的用户");
             execute_sql($conn, "insert into sakura.manage (bid,uid) value ("
@@ -66,12 +62,10 @@
         else if($_POST['call']=="19")
         {
             if($_POST['bid'] == '1') die("不允许删除该版面！");
-            $conn = connect_db('localhost', 'web_user', '');
             execute_sql($conn, "DELETE FROM sakura.board WHERE board_id = ".$_POST['bid']);
         }
         else if($_POST['call']=="20")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             $time = strval(time());
             $state = '4';
             if(isset($_POST['replyable'])) $state = '5';
@@ -82,7 +76,6 @@
         }
         else if($_POST['call']=="21")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             $old_state = query_one($conn,'post_state','sakura.posts','post_id',$_POST['pid']);
             $new_state = 1;
             switch($old_state)
@@ -96,7 +89,6 @@
         }
         else if($_POST['call']=="22")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             $old_state = query_one($conn,'post_state','sakura.posts','post_id',$_POST['pid']);
             $new_state = 1;
             switch($old_state)
@@ -110,7 +102,6 @@
         }
         else if($_POST['call']=="23")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             $old_state = query_one($conn,'post_state','sakura.posts','post_id',$_POST['pid']);
             $new_state = 1;
             if($old_state != 2) $new_state = 2;
@@ -118,7 +109,6 @@
         }
         else if($_POST['call']=="24")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             execute_sql($conn, "DELETE FROM sakura.posts WHERE post_id = ".$_POST['pid']);
         }
         array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单

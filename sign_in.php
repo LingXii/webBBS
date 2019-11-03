@@ -53,7 +53,6 @@
 <?php
     if(isset($_POST['call']) and $_POST['call']=="13")
     {
-        $conn = connect_db('localhost', 'web_user', '');
         $uid = check_usrpsw($conn,$_POST['user_name'],$_POST['user_pwd']);
         if($uid == NULL) die("账号或密码错误！");
         $_SESSION['uid'] = $uid;

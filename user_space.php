@@ -22,15 +22,13 @@
     include_once 'database_util.php';
 ?>
 <?php
-    if(!isset($_GET['uid'])) die("拒绝访问！");
-    $conn = connect_db('localhost','web_user','');
+    if (!isset($_GET['uid'])) die("拒绝访问！");
     $str_uid = strval($_GET['uid']);
-    if(query_one($conn,'user_id','sakura.user_info','user_id', $str_uid) == NULL)
+    if (query_one($conn,'user_id','sakura.user_info','user_id', $str_uid) == NULL)
         die("查无此人！");
 ?>
 
 <?php 
-    $conn = connect_db('localhost', 'web_user', '');
     $str_uid = strval($_GET['uid']);
     $user_name = query_one($conn,'user_name','sakura.user_info',
             'user_id',$str_uid);
@@ -40,7 +38,7 @@
     echo '<p>账号：'.$user_name.'</p>';
     echo '<p>uid：'.$str_uid.'</p>';
     
-    if($_SESSION['uid'] == $_GET['uid'])
+    if ($_SESSION['uid'] == $_GET['uid'])
     {
         $email = query_one($conn,'user_email','sakura.user_info',
             'user_id',$str_uid);
@@ -50,9 +48,9 @@
         $sql = "SELECT bid FROM sakura.manage WHERE uid = ".strval($_SESSION['uid']);
         $bid_val = mysqli_query($conn,$sql);
         $first_in = TRUE;
-        while($bid_row = mysqli_fetch_array($bid_val))
+        while ($bid_row = mysqli_fetch_array($bid_val))
         {
-            if(!$first_in) echo ",";
+            if (!$first_in) echo ",";
             $first_in = False;
             $str_bid = strval($bid_row[0]);
             $boardname = query_one($conn,'board_name','sakura.board','board_id',$str_bid);
@@ -61,16 +59,30 @@
         echo '</p>';
     }
 ?>
-    
-<form method="post" action="">
-<input type="submit" value="退出登录" />
-<input type="hidden" name="call" value="15" />
-</form>
+
+<?php
+if ($_SESSION['uid'] == $_GET['uid'])
+{
+    echo '<form method="post" action="">
+    <input type="submit" value="退出登录" />
+    <input type="hidden" name="call" value="15" />
+    </form>';
+}
+
+if ($_SESSION['uid'] > 0 && $_SESSION['uid'] != $_GET['uid'])
+{
+    echo '<form method="post" action="whisper.php">
+    <input type="submit" value="发消息" />
+    <input type="hidden" name="to" value='.$_GET['uid'].' />
+    <input type="hidden" name="entrance_uid" value='.$_GET['uid'].' />
+    </form>';
+}
+?>
     
 <?php
-if(isset($_POST['call']))
+if (isset($_POST['call']))
 {
-    if($_POST['call']=="15")
+    if ($_POST['call']=="15")
     {
         $_SESSION['uid'] = 0;
         header('Location: index.php');

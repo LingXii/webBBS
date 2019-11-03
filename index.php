@@ -19,7 +19,6 @@
 <?php 
     $bid = 1;
     if(isset($_GET['bid'])) $bid = $_GET['bid'];
-    $conn = connect_db('localhost', 'web_user', '');
     $boardname = query_one($conn,'board_name','sakura.board',
             'board_id',$bid);
     if($boardname == NULL) die("版面不存在！"); 
@@ -38,7 +37,6 @@
     {
         if($_POST['call']=="31")
         {
-            $conn = connect_db('localhost', 'web_user', '');
             $time = time();
             $state = '1';
             if(isset($_POST['replyable'])) $state = '3';
