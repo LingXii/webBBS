@@ -58,12 +58,23 @@ div.header {
     width: 100%;
 }
 
+a.title_conn {
+    float: left;
+    display: block;
+    color: #001aaf;
+    text-align: center;
+    padding: 10px;
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: bold;
+}
+
 a.title {
     float: left;
     display: block;
     color: #001aaf;
     text-align: center;
-    padding: 10px 10px;
+    padding: 10px;
     text-decoration: none;
     font-size: 30px;
     font-weight: bold;

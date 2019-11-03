@@ -23,8 +23,9 @@
     $boardname = query_one($conn,'board_name','sakura.board',
             'board_id',$bid);
     if($boardname == NULL) die("版面不存在！"); 
-    $title="Sakura 版面：".$boardname;
-    if($bid == 1) $title="Sakura";
+    // $title="Sakura 版面：".$boardname;
+    // if($bid == 1) $title="Sakura";
+    $title="Sakura";
     $show_buttons = TRUE;
 ?>
 <?php 

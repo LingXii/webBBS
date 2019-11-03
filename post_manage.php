@@ -24,7 +24,7 @@
     $boardname = query_one($conn,'board_name','sakura.board',
             'board_id',$str_bid);
     if($boardname == NULL) die("版面不存在！");
-    $title="Sakura 版面：".$boardname." 帖子管理";
+    $title="Sakura 版面管理";
     $show_buttons = FALSE;
 ?>
 <?php 

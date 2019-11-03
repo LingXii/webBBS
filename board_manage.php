@@ -13,7 +13,7 @@
 
 <body>
 <?php 
-    $title="Sakura 版面管理";
+    $title="Sakura 论坛版面管理";
     $show_buttons = FALSE;
 ?>
 <?php 

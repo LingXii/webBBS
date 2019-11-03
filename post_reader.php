@@ -13,14 +13,19 @@
 
 <body>
 <?php 
+    include_once 'style.php';
+    include_once 'database_util.php';
+?>
+<?php 
     if(!isset($_GET['pid'])) die("拒绝访问！");
     $title="Sakura";
     $show_buttons = TRUE;
+    $conn = connect_db('localhost', 'web_user', '');
+    $post_title = query_one($conn,'post_title','sakura.posts','post_id',$_GET['pid']);
+    if($post_title == NULL) die("帖子不存在！");
 ?>
 <?php 
-    include_once 'style.php';
-    include 'header.php';
-    include_once 'database_util.php';
+    include 'header.php';    
 ?>
     
 <div>
@@ -48,10 +53,7 @@
 <br/>
 <div>
 <?php 
-$conn = connect_db('localhost', 'web_user', '');
-$title = query_one($conn,'post_title','sakura.posts','post_id',$_GET['pid']);
-if($title == NULL) die("帖子不存在！");
-echo "<p><b>".$title."</b></p>";
+echo "<p><b>".$post_title."</b></p>";
 
 echo '<table border="1"><tr>';
 echo '<td><b>楼层数</b></td>';
