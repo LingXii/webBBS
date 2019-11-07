@@ -191,7 +191,7 @@ function build_web_database($conn)
     $sql = 'ALTER table sakura.board CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
     $sql = "INSERT into sakura.board (board_name) 
-            value ('所有版面'), ('旷野之息'), ('宝可梦'), ('唱见'), ('痒痒鼠');";
+            value ('所有版面'), ('旷野之息'), ('宝可梦'), ('唱见'), ('痒痒鼠'), ('明日方舟');";
     execute_sql($conn, $sql);
     
     // 版面管理表：bid（1为总版面），管理员(uid)
@@ -205,7 +205,7 @@ function build_web_database($conn)
     $sql = 'ALTER table sakura.board CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
     $sql = "INSERT into sakura.manage (bid,uid) 
-            value (1,1), (2,2), (3,4), (4,5), (5,6)";
+            value (1,1), (2,2), (3,4), (4,5), (5,6), (6,7)";
     execute_sql($conn, $sql);   
     
     // 帖子表：pid，标题，所属版面，发帖用户，创建时间，更新时间(最迟回复时间)，

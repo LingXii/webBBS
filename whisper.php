@@ -49,12 +49,15 @@
                 (msg_sender,msg_receiver,msg_time,msg_content,msg_state) 
                 values (".$_SESSION['uid'].", ".$_SESSION['entrance_uid'].", ".time().", '', -1);";
         $retval = execute_sql($conn, $sql);
+        array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
+        header('Location: whisper.php');
     }
     $sql = 'SELECT msg_sender + msg_receiver - '.$_SESSION['uid'].' as history from sakura.message
             Where msg_sender = '.$_SESSION['uid'].
                 ' or (msg_receiver = '.$_SESSION['uid'].' and msg_state <> -1) 
             Group by msg_sender + msg_receiver
-            Order by max(msg_time) desc';
+            Order by max(msg_time) desc';   
+    
     $retval = execute_sql($conn, $sql);
     echo_table($retval);
     $whisper_list = array();

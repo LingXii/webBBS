@@ -28,7 +28,7 @@
 ?>
     
 <div>
-    <?php
+<?php
     if(isset($_POST['call']))
     {
         if($_POST['call']=="32")
