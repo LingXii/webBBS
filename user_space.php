@@ -20,6 +20,7 @@
     include_once 'style.php';
     include 'header.php';
     include_once 'database_util.php';
+    include_once 'image_util.php';
 ?>
 <?php
     if (!isset($_GET['uid'])) die("拒绝访问！");
@@ -33,16 +34,20 @@
     {
         if($_POST['call']=="34")
         {
-            if ($_FILES["file"]["error"] > 0)
+            if ($_FILES["file"]["error"] == 1)
+                die('文件大小不可超过2MB');
+            if ($_FILES["file"]["error"] > 1)
                 die("Error: " . $_FILES["file"]["error"] . "<br />");
             $division = pathinfo($_FILES['file']['name']);
             $extensionName = $division['extension']; 
             if ($extensionName != "jpg" && $extensionName != "jpeg" && $extensionName != "png")
                 die('请上传jpg, jpeg, png格式文件');
-            move_uploaded_file($_FILES["file"]["tmp_name"],'user_headpic/'.$_SESSION['uid'].'.'.$extensionName);
+            deal(200,200,$_FILES['file']['tmp_name'],$_SESSION['uid']);
         }
         array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
         array_splice($_FILES, 0, count($_POST));
+        header("Last-Modified: " . gmdate( "D, d M Y H:i:s" ) . "GMT" );  
+        header("Cache-Control: no-cache, must-revalidate" );  // 清除浏览器缓存，否则显示出错
         header('Location: user_space.php?uid='.$_GET['uid']);
     }
 ?>
