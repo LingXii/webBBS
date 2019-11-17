@@ -29,22 +29,22 @@
     
 <div>
 <?php
-    if(isset($_POST['call']))
-    {
-        if($_POST['call']=="32")
-        {
-            $time = time();
-            $state = '1';
-            $sql = "insert into sakura.reply (reply_uid,reply_pid,reply_createtime,reply_content,reply_state) "
-                    ."value (".$_SESSION['uid'].",".$_GET['pid'].",".$time
-                    .",'".$_POST['content']."',".$state.")";
-            execute_sql($conn, $sql);
-            $sql = "UPDATE sakura.posts SET post_updatetime = ".$time." WHERE post_id = ".$_GET['pid'];
-            execute_sql($conn, $sql);
-        }
-        array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
-        header('Location: post_reader.php?pid='.$_GET['pid']);
-    }
+//    if(isset($_POST['call']))
+//    {
+//        if($_POST['call']=="32")
+//        {
+//            $time = time();
+//            $state = '1';
+//            $sql = "insert into sakura.reply (reply_uid,reply_pid,reply_createtime,reply_content,reply_state) "
+//                    ."value (".$_SESSION['uid'].",".$_GET['pid'].",".$time
+//                    .",'".$_POST['content']."',".$state.")";
+//            execute_sql($conn, $sql);
+//            $sql = "UPDATE sakura.posts SET post_updatetime = ".$time." WHERE post_id = ".$_GET['pid'];
+//            execute_sql($conn, $sql);
+//        }
+//        array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
+//        header('Location: post_reader.php?pid='.$_GET['pid']);
+//    }
 ?>
 </div>
     
@@ -100,11 +100,7 @@ echo '</table>';
 $post_state = query_one($conn,'post_state','sakura.posts','post_id',$_GET['pid']);
 if($post_state <= 3 && $_SESSION['uid'] != 0)
 {
-    echo '<form method="post" action="">'.
-        '<textarea cols="50" rows="10" name="content"></textarea>'.
-        '<input type="submit" value="发表回复"/>'.
-        '<input type="hidden" name="call" value="32"/>'.
-        '</form>';
+    echo '<a href="/editor.php?pid='.$_GET['pid'].'">回帖</a>';
 }
 ?>
 </div>

@@ -33,21 +33,21 @@
 
 <div>
     <?php
-    if(isset($_POST['call']))
-    {
-        if($_POST['call']=="31")
-        {
-            $time = time();
-            $state = '1';
-            if(isset($_POST['replyable'])) $state = '3';
-            $sql = "insert into sakura.posts (post_title,post_bid,post_uid,post_createtime,post_updatetime,"
-                    ."post_content,post_state) value ('".$_POST['title']."',".$bid.",".$_SESSION['uid']
-                    .",".$time.",".$time.",'".$_POST['content']."',".$state.")";
-            execute_sql($conn, $sql);
-        }
-        array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
-        header('Location: index.php?bid='.$bid);
-    }
+//    if(isset($_POST['call']))
+//    {
+//        if($_POST['call']=="31")
+//        {
+//            $time = time();
+//            $state = '1';
+//            if(isset($_POST['replyable'])) $state = '3';
+//            $sql = "insert into sakura.posts (post_title,post_bid,post_uid,post_createtime,post_updatetime,"
+//                    ."post_content,post_state) value ('".$_POST['title']."',".$bid.",".$_SESSION['uid']
+//                    .",".$time.",".$time.",'".$_POST['content']."',".$state.")";
+//            execute_sql($conn, $sql);
+//        }
+//        array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
+//        header('Location: index.php?bid='.$bid);
+//    }
 ?>
 </div>
 
@@ -151,14 +151,7 @@ if($bid == 1)
 <?php
 if($bid > 1 && $_SESSION['uid'] != 0)
 {
-    echo '<form method="post" action="">'.
-        '帖子标题<input type="text" name="title" required oninvalid="setCustomValidity('."'不可为空'".');" oninput="setCustomValidity('."''".')"/>'.
-        '<br />'.
-        '<textarea cols="50" rows="10" name="content"></textarea>'.
-        '<input type="submit" value="发帖"/>'.
-        '<label><input type="checkbox" name="replyable" value="0" >不可回复</label>'.
-        '<input type="hidden" name="call" value="31"/>'.
-        '</form>';
+    echo '<a href="/editor.php?bid='.$bid.'">发帖</a>';
 }
 ?>
 </div>
