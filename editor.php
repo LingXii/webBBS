@@ -13,7 +13,6 @@
 
 <body>
 <?php 
-    include_once 'style.php';
     include_once 'database_util.php';
 ?>
 <?php 
@@ -38,9 +37,6 @@
     $title="Sakura";
     $show_buttons = TRUE;
 ?>
-<?php 
-    include 'header.php';
-?>  
 
 <div>
     <?php
@@ -59,7 +55,7 @@
                 $content = str_replace("\n","<br/>",$content); // 在网页端正确显示换行符
                 if(isset($_FILES["files"]))
                 {
-                    echo 'Find files!';
+                    $content = $content.'<br/><br/>附加文件：';
                     for($i=0;$i<count($_FILES["files"]["name"]);$i++) // 依次上传文件
                     {
                         $division = pathinfo($_FILES['files']['name'][$i]);
@@ -90,7 +86,7 @@
                 $content = str_replace("\n","<br/>",$content); // 在网页端正确显示换行符
                 if(isset($_FILES["files"]))
                 {
-                    echo 'Find files!';
+                    $content = $content.'<br/><br/>附加文件：';
                     for($i=0;$i<count($_FILES["files"]["name"]);$i++) // 依次上传文件
                     {
                         $division = pathinfo($_FILES['files']['name'][$i]);
@@ -111,11 +107,14 @@
             header('Location: post_reader.php?pid='.$_GET['pid']);
         }
     }
+    
+    include_once 'style.php';
+    include 'header.php';  
 ?>
 </div>
 
 <br />
-<div>
+<div id="editor" class="editor">
 <?php
 if($_SESSION['uid'] == 0)
 {
@@ -139,20 +138,23 @@ echo '<br />'.
     '<textarea cols="50" rows="10" name="content"></textarea>';
 if(isset($_GET['bid']))
 {
-    echo '<input type="submit" value="发帖"/>';
     echo '<label><input type="checkbox" name="replyable" value="0" >不可回复</label>';
     if(find($conn,'uid','sakura.manage','bid','1',$_SESSION['uid']) || 
         find($conn,'uid','sakura.manage','bid',$bid,$_SESSION['uid'])) // 版面管理员可发置顶帖
         echo '<label><input type="checkbox" name="top" value="0" >置顶</label>';
-}
+}  
+echo '<input type="hidden" name="call" value="31"/>'.
+    '<p style="display:inline-block">上传附件：请一次性选择需要上传的所有文件</p>'.
+    '<input type="file" name="files[]" multiple=""/> ';
+if(isset($_GET['bid']))
+{
+    echo '<input type="submit" value="发帖"/>';
+}  
 if(isset($_GET['pid']))
 {
     echo '<input type="submit" value="回帖"/>';
-}    
-echo '<input type="hidden" name="call" value="31"/>'.
-    '<p>请一次性选择需要上传的所有文件</p>'.
-    '<input type="file" name="files[]" multiple=""/> '.
-    '</form>';
+}  
+echo '</form>';
 ?>
 </div>
 

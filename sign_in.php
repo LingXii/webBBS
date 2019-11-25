@@ -17,9 +17,19 @@
     $show_buttons = FALSE;
 ?>
 <?php 
+    include_once 'database_util.php';
+?>
+    
+<?php
+    if(isset($_POST['call']) and $_POST['call']=="13")
+    {
+        $uid = check_usrpsw($conn,$_POST['user_name'],$_POST['user_pwd']);
+        if($uid == NULL) die("账号或密码错误！");
+        $_SESSION['uid'] = $uid;
+        header('Location: index.php');
+    }
     include_once 'style.php';
     include 'header.php';
-    include_once 'database_util.php';
 ?>
 
 <br/>
@@ -49,16 +59,6 @@
         }
     ?>
 </div>
-
-<?php
-    if(isset($_POST['call']) and $_POST['call']=="13")
-    {
-        $uid = check_usrpsw($conn,$_POST['user_name'],$_POST['user_pwd']);
-        if($uid == NULL) die("账号或密码错误！");
-        $_SESSION['uid'] = $uid;
-        header('Location: index.php');
-    }
-?>
 
 </body>
 </html>

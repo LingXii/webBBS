@@ -17,8 +17,6 @@
     $show_buttons = FALSE;
 ?>
 <?php 
-    include_once 'style.php';
-    include 'header.php';
     include_once 'database_util.php';
 ?>
     
@@ -30,14 +28,6 @@
             'user_id',$str_uid);
     echo "当前操作者：".$nickname;
 ?>
-
-<br/>
-<div class="form">
-    <form method="post" action="">
-    版面名: <input type="text" name="board_name" required oninvalid="setCustomValidity('不可为空');" oninput="setCustomValidity('')"/>
-    <input type="submit" value="创建新版面"/>
-    <input type="hidden" name="call" value="16"/>
-    </form>
 
 <?php
     if(isset($_POST['call']))
@@ -114,7 +104,18 @@
         array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
         header('Location: board_manage.php');
     }
+    
+    include_once 'style.php';
+    include 'header.php';
 ?>
+    
+<br/>
+<div class="form">
+    <form method="post" action="">
+    版面名: <input type="text" name="board_name" required oninvalid="setCustomValidity('不可为空');" oninput="setCustomValidity('')"/>
+    <input type="submit" value="创建新版面"/>
+    <input type="hidden" name="call" value="16"/>
+    </form>
 </div>
 
 <br />

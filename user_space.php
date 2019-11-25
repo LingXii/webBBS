@@ -17,8 +17,6 @@
     $show_buttons = TRUE;
 ?>
 <?php 
-    include_once 'style.php';
-    include 'header.php';
     include_once 'database_util.php';
     include_once 'image_util.php';
 ?>
@@ -32,6 +30,12 @@
 <?php
     if(isset($_POST['call']))
     {
+        if ($_POST['call']=="15")
+        {
+            $_SESSION['uid'] = 0;
+            header('Location: index.php');
+        }
+        
         if($_POST['call']=="34")
         {
             if ($_FILES["file"]["error"] == 1)
@@ -43,13 +47,15 @@
             if ($extensionName != "jpg" && $extensionName != "jpeg" && $extensionName != "png")
                 die('请上传jpg, jpeg, png格式文件');
             deal(200,200,$_FILES['file']['tmp_name'],$_SESSION['uid']);
-        }
-        array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
-        array_splice($_FILES, 0, count($_POST));
-        header("Last-Modified: " . gmdate( "D, d M Y H:i:s" ) . "GMT" );  
-        header("Cache-Control: no-cache, must-revalidate" );  // 清除浏览器缓存，否则显示出错
-        header('Location: user_space.php?uid='.$_GET['uid']);
+            array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
+            array_splice($_FILES, 0, count($_POST));
+            header("Last-Modified: " . gmdate( "D, d M Y H:i:s" ) . "GMT" );  
+            header("Cache-Control: no-cache, must-revalidate" );  // 清除浏览器缓存，否则显示出错
+            header('Location: user_space.php?uid='.$_GET['uid']);
+        }      
     }
+    include_once 'style.php';
+    include 'header.php';  
 ?>
 
 <?php 
@@ -118,17 +124,6 @@ if ($_SESSION['uid'] == $_GET['uid'])
     <input type="submit" value="退出登录" />
     <input type="hidden" name="call" value="15" />
     </form>';
-}
-?>
-    
-<?php
-if (isset($_POST['call']))
-{
-    if ($_POST['call']=="15")
-    {
-        $_SESSION['uid'] = 0;
-        header('Location: index.php');
-    }
 }
 ?>
 

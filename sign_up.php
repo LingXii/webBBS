@@ -108,7 +108,7 @@
             $_SESSION['user_name'] = $_POST['user_name'];
             echo "注册成功！";
             echo '<form method="post" action="/sign_in.php">
-                    <input type="submit" value="点此跳转至登录页面"/>
+                    <input type="submit" class="login2" value="点此跳转至登录页面"/>
                     <input type="hidden" name="user_name" value="'.$_POST['user_name'].'"/>
                     <input type="hidden" name="user_pwd" value="'.$_POST['user_pwd'].'"/>
                     </form>';

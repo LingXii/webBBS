@@ -13,7 +13,6 @@
 
 <body>
 <?php 
-    include_once 'style.php';
     include_once 'database_util.php';
 ?>
 <?php 
@@ -26,9 +25,7 @@
     $title="Sakura 版面管理";
     $show_buttons = FALSE;
 ?>
-<?php 
-    include 'header.php';
-?>  
+ 
 <?php 
     $str_uid = strval($_SESSION['uid']);   
     if(!find($conn,'uid','sakura.manage','bid','1',$_SESSION['uid']) && 
@@ -104,6 +101,9 @@
         array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
         header('Location: post_manage.php?bid='.$str_bid);
     }
+    
+    include_once 'style.php';
+    include 'header.php';  
 ?>
 </div>
 

@@ -54,77 +54,117 @@
 <br />
 <div>
 <?php
-echo '<table border="1" id="posts"><tr>';
-echo '<th><b>帖子主题</b></th>';
-echo '<th><b>发帖用户</b></th>';
-echo '<th><b>发帖时间</b></th>';
-echo '<th><b>最新回复时间</b></th>';
-echo '</tr>';
-
-$sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state >= 4 ORDER BY post_updatetime DESC";
-$post_val = mysqli_query($conn,$sql);
-if(! $post_val) die("查询数据库失败：".mysqli_error($conn));
-$row_cnt = 1;
-while($row = mysqli_fetch_array($post_val))
+if($bid > 1)
 {
-    if($row_cnt%2 == 0) echo '<tr class="posteven">';
-    else echo '<tr class="postodd">';
-    echo '<td><a href="/post_reader.php?pid='.$row[0].'"><font color="red">'.$row[1].'</font></a></td>';
-    $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
-    echo '<td><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
-    $createtime = date('Y-n-j H:i:s',$row[4]);
-    echo '<td>'.$createtime.'</td>';
-    $updatetime = date('Y-n-j H:i:s',$row[5]);
-    echo '<td>'.$updatetime.'</td>';
-    echo '</tr>';  
-    $row_cnt += 1;    
-}
-$sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state <= 3 AND post_state <> 2 ORDER BY post_updatetime DESC";
-$post_val = mysqli_query($conn,$sql);
-if(! $post_val) die("查询数据库失败：".mysqli_error($conn));
+    echo '<table border="1" id="posts"><tr>';
+    echo '<th><b>帖子主题</b></th>';
+    echo '<th><b>发帖用户</b></th>';
+    echo '<th><b>发帖时间</b></th>';
+    echo '<th><b>最新回复时间</b></th>';
+    echo '</tr>';
 
-while($row = mysqli_fetch_array($post_val))
-{
-    if($row_cnt%2 == 0) echo '<tr class="posteven">';
-    else echo '<tr class="postodd">';
-    echo '<td><a href="/post_reader.php?pid='.$row[0].'">'.$row[1].'</a></td>';
-    $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
-    echo '<td><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
-    $createtime = date('Y-n-j H:i:s',$row[4]);
-    echo '<td>'.$createtime.'</td>';
-    $updatetime = date('Y-n-j H:i:s',$row[5]);
-    echo '<td>'.$updatetime.'</td>';
-    echo '</tr>';   
-    $row_cnt += 1;
+    $sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state >= 4 ORDER BY post_updatetime DESC";
+    $post_val = mysqli_query($conn,$sql);
+    if(! $post_val) die("查询数据库失败：".mysqli_error($conn));
+    $row_cnt = 1;
+    while($row = mysqli_fetch_array($post_val))
+    {
+        if($row_cnt%2 == 0) echo '<tr class="posteven">';
+        else echo '<tr class="postodd">';
+        echo '<td width="66%"><a href="/post_reader.php?pid='.$row[0].'" class="t">'.$row[1].'</a></td>';
+        $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
+        echo '<td width="10%"><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
+        $createtime = date('Y-n-j H:i:s',$row[4]);
+        echo '<td width="12%">'.$createtime.'</td>';
+        $updatetime = date('Y-n-j H:i:s',$row[5]);
+        echo '<td width="12%">'.$updatetime.'</td>';
+        echo '</tr>';  
+        $row_cnt += 1;    
+    }
+    $sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state <= 3 AND post_state <> 2 ORDER BY post_updatetime DESC";
+    $post_val = mysqli_query($conn,$sql);
+    if(! $post_val) die("查询数据库失败：".mysqli_error($conn));
+
+    while($row = mysqli_fetch_array($post_val))
+    {
+        if($row_cnt%2 == 0) echo '<tr class="posteven">';
+        else echo '<tr class="postodd">';
+        echo '<td width="66%"><a href="/post_reader.php?pid='.$row[0].'">'.$row[1].'</a></td>';
+        $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
+        echo '<td width="10%"><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
+        $createtime = date('Y-n-j H:i:s',$row[4]);
+        echo '<td width="12%">'.$createtime.'</td>';
+        $updatetime = date('Y-n-j H:i:s',$row[5]);
+        echo '<td width="12%">'.$updatetime.'</td>';
+        echo '</tr>';   
+        $row_cnt += 1;
+    }
+    echo '</table>';
 }
-echo '</table>';
 ?>
 </div> 
 
-<br />
 <div>
 <?php
 if($bid == 1)
 {
+    echo '<table border="1" id="notice"  style="float:right"><tr>';
+    echo '<th><b>论坛公告</b></th>';
+    echo '<th><b>发布用户</b></th>';
+    echo '</tr>';
+
+    $sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state >= 4 ORDER BY post_updatetime DESC";
+    $post_val = mysqli_query($conn,$sql);
+    if(! $post_val) die("查询数据库失败：".mysqli_error($conn));
+    $row_cnt = 1;
+    while($row = mysqli_fetch_array($post_val))
+    {
+        if($row_cnt%2 == 0) echo '<tr class="posteven">';
+        else echo '<tr class="postodd">';
+        echo '<td width="70%"><a href="/post_reader.php?pid='.$row[0].'" class="t">'.$row[1].'</a></td>';
+        $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
+        echo '<td width="30%"><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
+        echo '</tr>';  
+        $row_cnt += 1;    
+    }
+    $sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state <= 3 AND post_state <> 2 ORDER BY post_updatetime DESC";
+    $post_val = mysqli_query($conn,$sql);
+    if(! $post_val) die("查询数据库失败：".mysqli_error($conn));
+
+    while($row = mysqli_fetch_array($post_val))
+    {
+        if($row_cnt%2 == 0) echo '<tr class="posteven">';
+        else echo '<tr class="postodd">';
+        echo '<td width="70%><a href="/post_reader.php?pid='.$row[0].'">'.$row[1].'</a></td>';
+        $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
+        echo '<td width="30%><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
+        echo '</tr>';   
+        $row_cnt += 1;
+    }
+    echo '</table>';
+    
     $sql = "SELECT * FROM sakura.board ORDER BY board_id ASC";
     $board_val = mysqli_query($conn,$sql);
     if(! $board_val)
     die("查询数据库失败：".mysqli_error($conn));
 
-    echo '<table border="1"><tr>';
-    echo '<td><b>版面名</b></td>';
-    echo '<td><b>版面管理员</b></td>';
+    echo '<table border="1" id="notice"><tr>';
+    echo '<th><b>版面一览</b></th>';
+    echo '<th><b>版面管理员</b></th>';
     echo '</tr>';
+    $row_cnt = 1;
     while($row = mysqli_fetch_array($board_val))
     {
         $bid_ = strval($row[0]);
-        echo '<tr>';
-        echo '<td><a href="/index.php?bid='.$bid_.'">'.$row[1].'</a></td>';
+        if($row_cnt%2 == 0) echo '<tr class="posteven">';
+        else echo '<tr class="postodd">';
+        echo '<td width="70%"><a href="/index.php?bid='.$bid_.'">'.$row[1].'</a></td>';
 
         $sql = "SELECT uid FROM sakura.manage WHERE bid = ".strval($row[0]);
         $uid_val = mysqli_query($conn,$sql);
-        $managers = '<table border="0">';
+        $managers = '';
         $last_uid = '0';
+        $first_in = 1;
         while($uid_row = mysqli_fetch_array($uid_val))
         {
             $str_uid = strval($uid_row[0]);
@@ -133,12 +173,17 @@ if($bid == 1)
             $nickname = query_one($conn,'user_nickname','sakura.user_info',
                     'user_id',$str_uid);
             $nametext = '<a href="/user_space.php?uid='.$str_uid.'">'.$nickname.'</a>';
-            $managers = $managers.'<tr><td>'.$nametext.'</td></tr>';
+            if($first_in) 
+            {
+                $managers = $managers.$nametext;
+                $first_in = 0;
+            }
+            else $managers = $managers.', '.$nametext;
         }
-        $managers = $managers.'</table>';
 
-        echo '<td>'.$managers.'</td>';   
-        echo '</tr>';      
+        echo '<td width=30%>'.$managers.'</td>';   
+        echo '</tr>';     
+        $row_cnt += 1;
     }
     echo '</table>';
 }
@@ -151,7 +196,7 @@ if($bid == 1)
 <?php
 if($bid > 1 && $_SESSION['uid'] != 0)
 {
-    echo '<a href="/editor.php?bid='.$bid.'">发帖</a>';
+    echo '<a href="/editor.php?bid='.$bid.'" class="edit_btn">发帖</a>';
 }
 ?>
 </div>
