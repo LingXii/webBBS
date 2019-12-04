@@ -14,7 +14,6 @@ include_once 'database_util.php';
     if(isset($_GET['bid']) && $_GET['bid']!=1)
     {
         $bid = $_GET['bid'];
-        $conn = connect_db('localhost', 'web_user', '');
         $boardname = query_one($conn,'board_name','sakura.board','board_id',$bid);
         echo '<a class="title_conn"> → </a>';
         echo '<a href="/index.php?bid='.$bid.'" class="title">'.$boardname.'</a>';
@@ -27,19 +26,24 @@ include_once 'database_util.php';
             echo '<a href="/post_reader.php?pid='.$pid.'" class="title">'.$post_title.'</a>';
         }
     }
-    if(isset($_GET['pid']) && !isset($_GET['bid']))
+    else if(isset($_GET['pid']) && !isset($_GET['bid']))
     {
         $pid = $_GET['pid'];
         $post_title = query_one($conn,'post_title','sakura.posts','post_id',$_GET['pid']);
         $bid = query_one($conn,'post_bid','sakura.posts','post_id',$_GET['pid']);
-        $conn = connect_db('localhost', 'web_user', '');
         $boardname = query_one($conn,'board_name','sakura.board','board_id',$bid);
         echo '<a class="title_conn"> → </a>';
         echo '<a href="/index.php?bid='.$bid.'" class="title">'.$boardname.'</a>';
         echo '<a class="title_conn"> → </a>';
         echo '<a href="/post_reader.php?pid='.$pid.'" class="title">'.$post_title.'</a>';
     }
-    
+    else if(isset($_GET['uid']))
+    {
+        $uid = $_GET['uid'];
+        $nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$uid);
+        echo '<a class="title_conn"> → </a>';
+        echo '<a href="/user_space.php?uid='.$uid.'" class="title">'.$nickname.'的个人空间</a>';
+    }
 
     if($show_buttons)
     {

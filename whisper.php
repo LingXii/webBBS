@@ -77,12 +77,15 @@
             <input type="hidden" name="to" value='.$whisper_uid.' />
             </form>';
     }
-    $sql = 'SELECT * from sakura.message
+    if(isset($_SESSION['to']))
+    {
+        $sql = 'SELECT * from sakura.message
             where (msg_sender = '.$_SESSION['uid'].' or msg_receiver = '.$_SESSION['uid'].')
             and msg_sender + msg_receiver = '.($_SESSION['uid'] + $_SESSION['to']).'
             and msg_state <> -1';
-    $retval = execute_sql($conn, $sql);
-    echo_table($retval);
+        $retval = execute_sql($conn, $sql);
+        echo_table($retval);
+    }
 ?>
 
 <form method="post" action="">

@@ -22,24 +22,13 @@ $show_buttons = FALSE;
 ?>
 <?php include_once 'header.php'; ?>
 
-<form method="post" action="">
-<input type="submit" value="重置页面" />
-<input type="hidden" name="call" value="1" />
-</form>
 <?php
     function page_reset()
     {
         array_splice($_POST, 0, count($_POST));
     }
 ?>
-
-<form method="post" action="">
-数据库host: <input type="text" name="dbhost" value="localhost">
-用户名: <input type="text" name="dbuser" value="root">
-密码： <input type="password" name="dbpass" value="">
-<input type="submit" value="连接数据库" />
-<input type="hidden" name="call" value="2" />
-</form>
+    
 <?php
     function db_connect($h,$u,$p)
     {
@@ -49,9 +38,21 @@ $show_buttons = FALSE;
         $_SESSION['dbuser'] = $u;
         $_SESSION['dbpass'] = $p;
         header('Location: debug_database.php');
-        exit;
     }
 ?>
+
+<form method="post" action="">
+<input type="submit" value="重置页面" />
+<input type="hidden" name="call" value="1" />
+</form>
+
+<form method="post" action="">
+数据库host: <input type="text" name="dbhost" value="localhost">
+用户名: <input type="text" name="dbuser" value="root">
+密码： <input type="password" name="dbpass" value="">
+<input type="submit" value="连接数据库" />
+<input type="hidden" name="call" value="2" />
+</form>
 
 <?php
 // 每个按钮调用相应的函数

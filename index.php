@@ -26,6 +26,9 @@
     // if($bid == 1) $title="Sakura";
     $title="Sakura";
     $show_buttons = TRUE;
+    if(isset($_GET['page'])) $page = $_GET['page'];
+    else $page = 1;
+    $post_per_page = 30;
 ?>
 <?php 
     include 'header.php';
@@ -56,6 +59,10 @@
 <?php
 if($bid > 1)
 {
+    $post_num = query_one($conn,'count(*)','sakura.posts','post_bid',$bid);
+    $page_num = ceil($post_num/$post_per_page);
+    if($page_num <= 0) $page_num = 1;
+    
     echo '<table border="1" id="posts"><tr>';
     echo '<th><b>帖子主题</b></th>';
     echo '<th><b>发帖用户</b></th>';
@@ -66,9 +73,12 @@ if($bid > 1)
     $sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state >= 4 ORDER BY post_updatetime DESC";
     $post_val = mysqli_query($conn,$sql);
     if(! $post_val) die("查询数据库失败：".mysqli_error($conn));
-    $row_cnt = 1;
+    $row_cnt = 0;
     while($row = mysqli_fetch_array($post_val))
     {
+        $row_cnt += 1;
+        if($row_cnt <= ($page-1)*$post_per_page) continue;
+        if($row_cnt > $page*$post_per_page) break;
         if($row_cnt%2 == 0) echo '<tr class="posteven">';
         else echo '<tr class="postodd">';
         echo '<td width="66%"><a href="/post_reader.php?pid='.$row[0].'" class="t">'.$row[1].'</a></td>';
@@ -78,8 +88,7 @@ if($bid > 1)
         echo '<td width="12%">'.$createtime.'</td>';
         $updatetime = date('Y-n-j H:i:s',$row[5]);
         echo '<td width="12%">'.$updatetime.'</td>';
-        echo '</tr>';  
-        $row_cnt += 1;    
+        echo '</tr>';              
     }
     $sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$bid." AND post_state <= 3 AND post_state <> 2 ORDER BY post_updatetime DESC";
     $post_val = mysqli_query($conn,$sql);
@@ -87,6 +96,9 @@ if($bid > 1)
 
     while($row = mysqli_fetch_array($post_val))
     {
+        $row_cnt += 1;
+        if($row_cnt <= ($page-1)*$post_per_page) continue;
+        if($row_cnt > $page*$post_per_page) break;
         if($row_cnt%2 == 0) echo '<tr class="posteven">';
         else echo '<tr class="postodd">';
         echo '<td width="66%"><a href="/post_reader.php?pid='.$row[0].'">'.$row[1].'</a></td>';
@@ -96,8 +108,7 @@ if($bid > 1)
         echo '<td width="12%">'.$createtime.'</td>';
         $updatetime = date('Y-n-j H:i:s',$row[5]);
         echo '<td width="12%">'.$updatetime.'</td>';
-        echo '</tr>';   
-        $row_cnt += 1;
+        echo '</tr>';       
     }
     echo '</table>';
 }
@@ -194,9 +205,39 @@ if($bid == 1)
 <br />
 <div>
 <?php
-if($bid > 1 && $_SESSION['uid'] != 0)
+if($bid > 1)
 {
-    echo '<a href="/editor.php?bid='.$bid.'" class="edit_btn">发帖</a>';
+    if($_SESSION['uid'] != 0)
+        echo '<a href="/editor.php?bid='.$bid.'" class="edit_btn">发帖</a>';
+    
+    if($page==1)
+        echo '<a href="/index.php?bid='.$bid.'&page=1" class="npage_btn" style="margin-left:15px;">第一页</a>';
+    else
+        echo '<a href="/index.php?bid='.$bid.'&page=1" class="page_btn" style="margin-left:15px;">第一页</a>';
+    
+    if($page==1)
+    {
+        echo '<a href="/index.php?bid='.$bid.'&page=1" class="npage_btn">1</a>';
+        if($page_num>1)
+            echo '<a href="/index.php?bid='.$bid.'&page=2" class="page_btn">2</a>';
+    }
+    else if($page==$page_num)
+    {
+        if($page>1)
+            echo '<a href="/index.php?bid='.$bid.'&page='.($page-1).'" class="page_btn">'.($page-1).'</a>';
+        echo '<a href="/index.php?bid='.$bid.'&page='.($page).'" class="npage_btn">'.($page).'</a>';
+    }
+    else
+    {
+        echo '<a href="/index.php?bid='.$bid.'&page='.($page-1).'" class="page_btn">'.($page-1).'</a>';
+        echo '<a href="/index.php?bid='.$bid.'&page='.($page).'" class="npage_btn">'.($page).'</a>';
+        echo '<a href="/index.php?bid='.$bid.'&page='.($page+1).'" class="page_btn">'.($page+1).'</a>';
+    }
+    
+    if($page==$page_num)
+        echo '<a href="/index.php?bid='.$bid.'&page='.$page_num.'" class="npage_btn">最后一页</a>';
+    else
+        echo '<a href="/index.php?bid='.$bid.'&page='.$page_num.'" class="page_btn">最后一页</a>';
 }
 ?>
 </div>

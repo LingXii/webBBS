@@ -175,6 +175,20 @@ a.topnav:hover {
     text-decoration: underline; 
     font-weight:bold;
 }
+#posts input[type=submit] {
+    width: 130px;
+    background-color: #5d70dc;
+    color: white;
+    padding: 5px;
+    margin: 2px;
+    border: 0px;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+#posts input[type=submit]:hover {
+    background-color: #4459d4;
+}
 
 #notice
 {
@@ -241,15 +255,54 @@ a.edit_btn {
     display: block;
     color: #ffffff;
     text-align: center;
-    padding: 15px 15px;
+    padding: 12px;
     text-decoration: none;
     background-color: #00158c;
-    font-size:20px;
+    font-size:18px;
     font-weight:bold;
-    margin: 0px 20px
+    margin: 0px 20px;
+    float: right;
 }
 
 a.edit_btn:hover {
+    background-color: #ced6ff;
+    color: black;
+}
+
+a.page_btn {
+    float: left;
+    display: block;
+    color: #000000;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    background-color: #ced6ff;
+    font-size:18px;
+    font-weight:bold;
+    margin: 1px;
+    float: left;
+}
+
+a.page_btn:hover {
+    background-color: #eaedff;
+    color: black;
+}
+
+a.npage_btn {
+    float: left;
+    display: block;
+    color: #ffffff;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    background-color: #00158c;
+    font-size:18px;
+    font-weight:bold;
+    margin: 1px;
+    float: left;
+}
+
+a.npage_btn:hover {
     background-color: #ced6ff;
     color: black;
 }
@@ -366,4 +419,117 @@ div.editor{
     color: #000000;
     margin: 0 auto;
 }
+
+div.userleft{
+    width: 20%;
+    float: left;
+    border: 0px;
+    padding: 0px;
+    margin: 10px;
+}
+
+div.userright{
+    width: 77%;
+    float: right;
+    border: 0px;
+    padding: 0px;
+    margin: 10px;
+}
+
+input[type=submit].button {
+    width: 130px;
+    background-color: #5d70dc;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+input[type=submit].button:hover {
+    background-color: #4459d4;
+}
+
+input[type=text].button, select {
+    width: 60%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+a.button
+{
+    text-decoration: none;
+    font-size: 17px;
+    color: #000077;
+}
+a.button:hover 
+{
+    text-decoration: underline; 
+}
+
+div.middle{
+    width: 62%;
+    border-radius: 5px;
+    padding: 0px;
+    margin: 0 auto;
+}
+
+div.middle{
+    width: 90%;
+    border-radius: 5px;
+    padding: 0px;
+    margin: 0 auto;
+}
+
+#people
+{
+    width:98%;
+    margin: 0 auto;
+}
+#people td 
+{
+    font-size:1em;
+    padding:5px 5px;
+    border: 0px;
+    text-align:left;
+    color:#000000;
+}
+#people a 
+{
+    text-decoration: none;
+    font-size: 17px;
+    color: #000077;
+}
+#people a:hover 
+{
+    text-decoration: underline; 
+}
+#people input[type=submit] {
+    width: 130px;
+    background-color: #5d70dc;
+    color: white;
+    padding: 4px;
+    margin: 0px;
+    border: 0px;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+#people input[type=submit]:hover {
+    background-color: #4459d4;
+}
+#people input[type=text], select {
+    width: 60%;
+    padding: 4px;
+    margin: 0px;
+    display: inline-block;
+    border: 0px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
 </style>

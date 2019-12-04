@@ -39,14 +39,13 @@ function dealpng($target_img,$w,$h,$x,$y,$original_width,$original_height,$targe
     imagedestroy($target);
 }
 
-function deal($target_width,$target_height,$target_img,$uid)
+function deal($target_width,$target_height,$target_img,$filename)
 {
     $img_info=getimagesize($target_img);  // 获取原图尺寸
  
     $original_width=$img_info[0];       //原图片宽度
     $original_height=$img_info[1];       //原图片高度
     $original_mime=$img_info['mime'];
-    $filename = $uid;
     $type=substr($original_mime,6);       //原本$original_mime值为'image/类型'，通过从第六位字符开始截取得到图片类型
  
  
@@ -80,6 +79,24 @@ function deal($target_width,$target_height,$target_img,$uid)
             echo "图片类型不正确";
             break;
     }
+}
+
+function show_headpic_200($uid)
+{
+    $file_prefix = 'user_headpic/'.$uid;
+    if(file_exists($file_prefix.'_200.jpg')) echo '<img src="'.$file_prefix.'_200.jpg">';
+    else if(file_exists($file_prefix.'_200.jpeg')) echo '<img src="'.$file_prefix.'_200.jpeg">';
+    else if(file_exists($file_prefix.'_200.png')) echo '<img src="'.$file_prefix.'_200.png">';
+    else echo '<img src="user_headpic/0_200.jpg">';
+}
+
+function show_headpic_60($uid)
+{
+    $file_prefix = 'user_headpic/'.$uid;
+    if(file_exists($file_prefix.'_60.jpg')) echo '<img src="'.$file_prefix.'_60.jpg">';
+    else if(file_exists($file_prefix.'_60.jpeg')) echo '<img src="'.$file_prefix.'_60.jpeg">';
+    else if(file_exists($file_prefix.'_60.png')) echo '<img src="'.$file_prefix.'_60.png">';
+    else echo '<img src="user_headpic/0_60.jpg">';
 }
 
 ?>

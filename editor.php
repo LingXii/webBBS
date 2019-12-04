@@ -53,14 +53,14 @@
                 if(!isset($_POST['replyable']) && isset($_POST['top'])) $state = '5';
                 $content = $_POST['content'];
                 $content = str_replace("\n","<br/>",$content); // 在网页端正确显示换行符
-                if(isset($_FILES["files"]))
+                if(isset($_FILES["files"]) && $_FILES["files"]["name"][0]!='')
                 {
                     $content = $content.'<br/><br/>附加文件：';
                     for($i=0;$i<count($_FILES["files"]["name"]);$i++) // 依次上传文件
                     {
                         $division = pathinfo($_FILES['files']['name'][$i]);
                         $extensionName = $division['extension']; 
-                        $file_url = 'files/'.md5($_FILES["files"]["name"][$i]).'.'.$extensionName;
+                        $file_url = 'files/'.md5(uniqid(microtime(true),true)).'.'.$extensionName;
                         move_uploaded_file($_FILES["files"]["tmp_name"][$i], $file_url);
                         $content = $content.'<br/><a href="/'.$file_url.'">'.$_FILES["files"]["name"][$i].'</a>';
                     }
@@ -84,14 +84,14 @@
                 $content = str_replace("\n","<br/>",$content); // 在网页端正确显示换行符
                 $content = $_POST['content'];
                 $content = str_replace("\n","<br/>",$content); // 在网页端正确显示换行符
-                if(isset($_FILES["files"]))
+                if(isset($_FILES["files"]) && $_FILES["files"]["name"][0]!='')
                 {
                     $content = $content.'<br/><br/>附加文件：';
                     for($i=0;$i<count($_FILES["files"]["name"]);$i++) // 依次上传文件
                     {
                         $division = pathinfo($_FILES['files']['name'][$i]);
                         $extensionName = $division['extension']; 
-                        $file_url = 'files/'.md5($_FILES["files"]["name"][$i]).'.'.$extensionName;
+                        $file_url = 'files/'.md5(uniqid(microtime(true),true)).'.'.$extensionName;
                         move_uploaded_file($_FILES["files"]["tmp_name"][$i], $file_url);
                         $content = $content.'<br/><a href="/'.$file_url.'">'.$_FILES["files"]["name"][$i].'</a>';
                     }

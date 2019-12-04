@@ -23,26 +23,8 @@
             'board_id',$str_bid);
     if($boardname == NULL) die("版面不存在！");
     $title="Sakura 版面管理";
-    $show_buttons = FALSE;
+    $show_buttons = TRUE;
 ?>
- 
-<?php 
-    $str_uid = strval($_SESSION['uid']);   
-    if(!find($conn,'uid','sakura.manage','bid','1',$_SESSION['uid']) && 
-        !find($conn,'uid','sakura.manage','bid',$str_bid,$_SESSION['uid']))
-        die("访问错误：权限不足");
-    $nickname = query_one($conn,'user_nickname','sakura.user_info',
-            'user_id',$str_uid);
-    echo "当前操作者：".$nickname;
-?>
-
-<br/>
-<div class="form">
-    <form method="post" action="">
-    版面名: <input type="text" name="board_name" required oninvalid="setCustomValidity('不可为空');" oninput="setCustomValidity('')"/>
-    <input type="submit" value="更改版面名"/>
-    <input type="hidden" name="call" value="25"/>
-    </form>
 
 <?php
     if(isset($_POST['call']))
@@ -105,34 +87,56 @@
     include_once 'style.php';
     include 'header.php';  
 ?>
+    
+<br/>
+<div class="editor">
+<?php 
+    $str_uid = strval($_SESSION['uid']);   
+    if(!find($conn,'uid','sakura.manage','bid','1',$_SESSION['uid']) && 
+        !find($conn,'uid','sakura.manage','bid',$str_bid,$_SESSION['uid']))
+        die("访问错误：权限不足");
+    $nickname = query_one($conn,'user_nickname','sakura.user_info',
+            'user_id',$str_uid);
+    echo '<p><font color="red">当前操作者：'.$nickname.'</font></p>';
+?>
+
+    <form method="post" action="">
+    版面名: <input type="text" class="button" name="board_name" required oninvalid="setCustomValidity('不可为空');" oninput="setCustomValidity('')"/>
+    <input type="submit" class="button" value="更改版面名"/>
+    <input type="hidden" name="call" value="25"/>
+    </form>
 </div>
 
 <br />
-<div>
+<div class="middle_big">
 <?php
-$sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$str_bid." ORDER BY post_id ASC";
+$sql = "SELECT * FROM sakura.posts WHERE post_bid = ".$str_bid." ORDER BY post_updatetime DESC";
 $post_val = mysqli_query($conn,$sql);
 if(! $post_val)
 die("查询数据库失败：".mysqli_error($conn));
 
-echo '<table border="1"><tr>';
-echo '<td><b>帖子id</b></td>';
-echo '<td><b>帖子主题</b></td>';
-echo '<td><b>发帖用户</b></td>';
-echo '<td><b>发帖时间</b></td>';
-echo '<td><b>帖子状态</b></td>';
-echo '<td><b>操作</b></td>';
+echo '<table border="1" id="posts"><tr>';
+echo '<th><b>帖子id</b></th>';
+echo '<th><b>帖子主题</b></th>';
+echo '<th><b>发帖用户</b></th>';
+echo '<th><b>发帖时间</b></th>';
+echo '<th><b>帖子状态</b></th>';
+echo '<th><b>操作</b></th>';
 echo '</tr>';
+$row_cnt = 0;
 while($row = mysqli_fetch_array($post_val))
 {
+    if($row[7]!=2) continue;
+    $row_cnt += 1;
+    if($row_cnt%2 == 0) echo '<tr class="posteven">';
+    else echo '<tr class="postodd">';
     $str_pid = strval($row[0]);
-    echo '<tr>';
-    echo '<td>'.$str_pid.'</td>';
-    echo '<td><a href="/post_reader.php?pid='.$str_pid.'">'.$row[1].'</a></td>';
+    echo '<td width="10%">'.$str_pid.'</td>';
+    echo '<td width="45%"><a href="/post_reader.php?pid='.$str_pid.'">'.$row[1].'</a></td>';
     $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',strval($row[3]));
-    echo '<td><a href="/user_space.php?uid='.strval($row[3]).'">'.$user_nickname.'</a></td>';
+    echo '<td width="10%"><a href="/user_space.php?uid='.strval($row[3]).'">'.$user_nickname.'</a></td>';
     $createtime = date('Y-n-j H:i:s',$row[4]);
-    echo '<td>'.$createtime.'</td>';
+    echo '<td width="15%">'.$createtime.'</td>';
     $state = "正常";
     switch($row[7])
     {
@@ -141,7 +145,7 @@ while($row = mysqli_fetch_array($post_val))
         case 4: $state = "置顶";break;
         case 5: $state = "置顶不可回复";break;
     }
-    echo '<td>'.$state.'</td>';
+    echo '<td width="10%">'.$state.'</td>';
     
     $top_tip = "置顶";
     if($row[7] >= 4) $top_tip = "取消置顶";
@@ -170,26 +174,14 @@ while($row = mysqli_fetch_array($post_val))
             .'<input type="hidden" name="pid" value="'.$str_pid.'"/>'
             .'</form>';
     if($row[7] == 2)
-        echo '<td>'.$lock_flip_form.$delete_post_form.'</td>';
+        echo '<td width="10%">'.$lock_flip_form.$delete_post_form.'</td>';
     else
-        echo '<td>'.$top_flip_form.$reply_flip_form.$lock_flip_form.$delete_post_form.'</td>';
+        echo '<td width="10%">'.$top_flip_form.$reply_flip_form.$lock_flip_form.$delete_post_form.'</td>';
     echo '</tr>';      
 }
 echo '</table>';
 ?>
 </div> 
-
-<br />
-<div>
-    <form method="post" action="">
-    公告标题<input type="text" name="title" required oninvalid="setCustomValidity('不可为空');" oninput="setCustomValidity('')"/>
-    <br />
-    <textarea cols="50" rows="10" name="content"></textarea>
-    <input type="submit" value="发布版面公告"/>
-    <label><input type="checkbox" checked="checked" name="replyable" value="0" >不可回复</label>
-    <input type="hidden" name="call" value="26"/>
-    </form>
-</div>
 
 </body>
 </html>

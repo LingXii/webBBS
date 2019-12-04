@@ -46,7 +46,8 @@
             $extensionName = $division['extension']; 
             if ($extensionName != "jpg" && $extensionName != "jpeg" && $extensionName != "png")
                 die('请上传jpg, jpeg, png格式文件');
-            deal(200,200,$_FILES['file']['tmp_name'],$_SESSION['uid']);
+            deal(200,200,$_FILES['file']['tmp_name'],$_SESSION['uid']."_200");
+            deal(60,60,$_FILES['file']['tmp_name'],$_SESSION['uid']."_60");
             array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
             array_splice($_FILES, 0, count($_POST));
             header("Last-Modified: " . gmdate( "D, d M Y H:i:s" ) . "GMT" );  
@@ -64,15 +65,11 @@
             'user_id',$str_uid);
     $nickname = query_one($conn,'user_nickname','sakura.user_info',
             'user_id',$str_uid);
-    echo '<p><font color="red">'.$nickname.'的个人主页</font></p>';
+    
+    echo '<div class="userright">';
     echo '<p>账号：'.$user_name.'</p>';
     echo '<p>uid：'.$str_uid.'</p>';
-    echo '<p>头像：</p>';
-    $file_prefix = 'user_headpic/'.$_GET['uid'];
-    if(file_exists($file_prefix.'.jpg')) echo '<img src="'.$file_prefix.'.jpg">';
-    else if(file_exists($file_prefix.'.jpeg')) echo '<img src="'.$file_prefix.'.jpeg">';
-    else if(file_exists($file_prefix.'.png')) echo '<img src="'.$file_prefix.'.png">';
-    else echo '<img src="user_headpic/0.jpg">';
+    
     
     if ($_SESSION['uid'] == $_GET['uid'])
     {
@@ -90,41 +87,45 @@
             $first_in = False;
             $str_bid = strval($bid_row[0]);
             $boardname = query_one($conn,'board_name','sakura.board','board_id',$str_bid);
-            echo '<a href="/post_manage.php?bid='.$str_bid.'">'.$boardname.'</a>';
+            echo '<a class="button" href="/post_manage.php?bid='.$str_bid.'">'.$boardname.'</a>';
         }
-        echo '</p>';
-        
+        echo '</p>';    
+    }
+    if ($_SESSION['uid'] == $_GET['uid'])
+    {
+        echo '<form method="post" action="whisper.php?uid='.$_GET['uid'].'">
+        <input type="submit" class="button" value="查看消息" />
+        </form>';
+    }
+    if ($_SESSION['uid'] > 0 && $_SESSION['uid'] != $_GET['uid'])
+    {
+        echo '<form method="post" action="whisper.php?uid='.$_GET['uid'].'">
+        <input type="submit" class="button" value="发消息" />
+        <input type="hidden" name="to" value='.$_GET['uid'].' />
+        <input type="hidden" name="entrance_uid" value='.$_GET['uid'].' />
+        </form>';
+    }
+
+    if ($_SESSION['uid'] == $_GET['uid'])
+    {
+        echo '<form method="post" action="">
+        <input type="submit" class="button" value="退出登录" />
+        <input type="hidden" name="call" value="15" />
+        </form>';
+    }
+    echo '</div>';
+    
+    echo '<div class="userleft">';
+    show_headpic_200($_GET['uid']);  
+    if ($_SESSION['uid'] == $_GET['uid'])
+    {
         echo '<form action="" method="post" enctype="multipart/form-data">
-            <input type="file" name="file"/> 
+            <input type="file"name="file"/> 
             <input type="submit" value="更改头像"/>
             <input type="hidden" name="call" value="34"/>
             </form>';
     }
-?>
-
-<?php
-if ($_SESSION['uid'] == $_GET['uid'])
-{
-    echo '<form method="post" action="whisper.php">
-    <input type="submit" value="查看消息" />
-    </form>';
-}
-if ($_SESSION['uid'] > 0 && $_SESSION['uid'] != $_GET['uid'])
-{
-    echo '<form method="post" action="whisper.php">
-    <input type="submit" value="发消息" />
-    <input type="hidden" name="to" value='.$_GET['uid'].' />
-    <input type="hidden" name="entrance_uid" value='.$_GET['uid'].' />
-    </form>';
-}
-
-if ($_SESSION['uid'] == $_GET['uid'])
-{
-    echo '<form method="post" action="">
-    <input type="submit" value="退出登录" />
-    <input type="hidden" name="call" value="15" />
-    </form>';
-}
+    echo '</div>';
 ?>
 
 </body>
