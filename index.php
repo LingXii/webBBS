@@ -12,8 +12,8 @@
 </head>
 
 <body>
+    
 <?php 
-    include_once 'style.php';
     include_once 'database_util.php';
 ?>
 <?php 
@@ -30,36 +30,44 @@
     else $page = 1;
     $post_per_page = 30;
 ?>
+
+<?php
+    if(isset($_POST['call']))
+    {
+        if($_POST['call']=="49")
+        {
+            $new_state = 2;
+            execute_sql($conn, "UPDATE sakura.posts SET post_state = ".$new_state." WHERE post_id = ".$_POST['pid']);
+        }
+        else if($_POST['call']=="47")
+        {
+            $old_state = query_one($conn,'post_state','sakura.posts','post_id',$_POST['pid']);
+            $new_state = 1;
+            switch($old_state)
+            {
+                case 1:$new_state = 4;break;
+                case 3:$new_state = 5;break;
+                case 4:$new_state = 1;break;
+                case 5:$new_state = 3;break;
+            }
+            execute_sql($conn, "UPDATE sakura.posts SET post_state = ".$new_state." WHERE post_id = ".$_POST['pid']);
+        }
+        array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
+        header('Location: index.php?bid='.$bid);
+    }
+?>
+    
 <?php 
+    include_once 'style.php';
     include 'header.php';
 ?>  
-
-<div>
-    <?php
-//    if(isset($_POST['call']))
-//    {
-//        if($_POST['call']=="31")
-//        {
-//            $time = time();
-//            $state = '1';
-//            if(isset($_POST['replyable'])) $state = '3';
-//            $sql = "insert into sakura.posts (post_title,post_bid,post_uid,post_createtime,post_updatetime,"
-//                    ."post_content,post_state) value ('".$_POST['title']."',".$bid.",".$_SESSION['uid']
-//                    .",".$time.",".$time.",'".$_POST['content']."',".$state.")";
-//            execute_sql($conn, $sql);
-//        }
-//        array_splice($_POST, 0, count($_POST)); // 清空表单并刷新页面，避免再次刷新时重复提交表单
-//        header('Location: index.php?bid='.$bid);
-//    }
-?>
-</div>
 
 <br />
 <div>
 <?php
 if($bid > 1)
 {
-    $post_num = query_one($conn,'count(*)','sakura.posts','post_bid',$bid);
+    $post_num = query_num($conn,'sakura.posts','post_bid = '.$bid.' and post_state <> 2');
     $page_num = ceil($post_num/$post_per_page);
     if($page_num <= 0) $page_num = 1;
     
@@ -81,7 +89,19 @@ if($bid > 1)
         if($row_cnt > $page*$post_per_page) break;
         if($row_cnt%2 == 0) echo '<tr class="posteven">';
         else echo '<tr class="postodd">';
-        echo '<td width="66%"><a href="/post_reader.php?pid='.$row[0].'" class="t">'.$row[1].'</a></td>';
+        echo '<td width="66%">';
+        $lock_form = '<form method="post" action="">'
+            .'<input type="submit" class="lock" value=""/>'
+            .'<input type="hidden" name="call" value="49"/>'
+            .'<input type="hidden" name="pid" value="'.$row[0].'"/>'
+            .'</form>';
+        $top_flip_form = '<form method="post" action="">'
+            .'<input type="submit" value="取消置顶" class="sbutton"/>'
+            .'<input type="hidden" name="call" value="47"/>'
+            .'<input type="hidden" name="pid" value="'.$row[0].'"/>'
+            .'</form>';
+        if(check_board_manager($conn,$row[2])) echo $lock_form.$top_flip_form;
+        echo '<a href="/post_reader.php?pid='.$row[0].'" class="t">'.$row[1].'</a></td>';
         $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
         echo '<td width="10%"><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
         $createtime = date('Y-n-j H:i:s',$row[4]);
@@ -101,7 +121,14 @@ if($bid > 1)
         if($row_cnt > $page*$post_per_page) break;
         if($row_cnt%2 == 0) echo '<tr class="posteven">';
         else echo '<tr class="postodd">';
-        echo '<td width="66%"><a href="/post_reader.php?pid='.$row[0].'">'.$row[1].'</a></td>';
+        echo '<td width="66%">';
+        $lock_form = '<form method="post" action="">'
+            .'<input type="submit" class="lock" value=""/>'
+            .'<input type="hidden" name="call" value="49"/>'
+            .'<input type="hidden" name="pid" value="'.$row[0].'"/>'
+            .'</form>';
+        if(check_board_manager($conn,$row[2])) echo $lock_form;
+        echo '<a href="/post_reader.php?pid='.$row[0].'">'.$row[1].'</a></td>';
         $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
         echo '<td width="10%"><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
         $createtime = date('Y-n-j H:i:s',$row[4]);
@@ -132,7 +159,14 @@ if($bid == 1)
     {
         if($row_cnt%2 == 0) echo '<tr class="posteven">';
         else echo '<tr class="postodd">';
-        echo '<td width="70%"><a href="/post_reader.php?pid='.$row[0].'" class="t">'.$row[1].'</a></td>';
+        echo '<td width="70%">';
+        $lock_form = '<form method="post" action="">'
+            .'<input type="submit" class="lock" value=""/>'
+            .'<input type="hidden" name="call" value="49"/>'
+            .'<input type="hidden" name="pid" value="'.$row[0].'"/>'
+            .'</form>';
+        if(find($conn,'uid','sakura.manage','bid','1',$_SESSION['uid'])) echo $lock_form;
+        echo '<a href="/post_reader.php?pid='.$row[0].'" class="t">'.$row[1].'</a></td>';
         $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
         echo '<td width="30%"><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
         echo '</tr>';  

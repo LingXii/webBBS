@@ -6,21 +6,11 @@ $_SESSION['dbpass'] = "";
 $_SESSION['use_db'] = "";
 ?>
 
-<!DOCTYPE html>
-<html>
-
-<head>
-<meta charset="utf-8">
-<title>Sakura</title>
-</head>
-
-<body>
 <?php
 // 全局变量
 $title = "Sakura - 开发页面";
 $show_buttons = FALSE;
 ?>
-<?php include_once 'header.php'; ?>
 
 <?php
     function page_reset()
@@ -40,6 +30,18 @@ $show_buttons = FALSE;
         header('Location: debug_database.php');
     }
 ?>
+<?php
+// 每个按钮调用相应的函数
+if(isset($_POST['call']))
+{
+    if($_POST['call']=="1") page_reset();
+    else if($_POST['call']=="2") db_connect($_POST['dbhost'],
+        $_POST['dbuser'],$_POST['dbpass']);
+    array_splice($_POST, 0, count($_POST));
+}
+?>
+    
+<?php include_once 'header.php'; ?>
 
 <form method="post" action="">
 <input type="submit" value="重置页面" />
@@ -53,17 +55,6 @@ $show_buttons = FALSE;
 <input type="submit" value="连接数据库" />
 <input type="hidden" name="call" value="2" />
 </form>
-
-<?php
-// 每个按钮调用相应的函数
-if(isset($_POST['call']))
-{
-    if($_POST['call']=="1") page_reset();
-    else if($_POST['call']=="2") db_connect($_POST['dbhost'],
-        $_POST['dbuser'],$_POST['dbpass']);
-    array_splice($_POST, 0, count($_POST));
-}
-?>
 
 </body>
 </html>

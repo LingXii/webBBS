@@ -175,8 +175,9 @@ a.topnav:hover {
     text-decoration: underline; 
     font-weight:bold;
 }
-#posts input[type=submit] {
-    width: 130px;
+
+input[type=submit].posts {
+    width: 80px;
     background-color: #5d70dc;
     color: white;
     padding: 5px;
@@ -186,7 +187,7 @@ a.topnav:hover {
     cursor: pointer;
     float: right;
 }
-#posts input[type=submit]:hover {
+input[type=submit].posts:hover {
     background-color: #4459d4;
 }
 
@@ -478,8 +479,8 @@ div.middle{
     margin: 0 auto;
 }
 
-div.middle{
-    width: 90%;
+div.middle_big{
+    width: 100%;
     border-radius: 5px;
     padding: 0px;
     margin: 0 auto;
@@ -530,6 +531,60 @@ div.middle{
     border: 0px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+input[type=submit].lock {
+    width: 22px;
+    height: 22px;
+    background: url('files/lock.png');
+    float: right;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    cursor: pointer;
+}
+
+input[type=submit].lock:hover {
+    background: url('files/lock_h.png');
+}
+
+input[type=submit].sbutton {
+    width: 80px;
+    background-color: #5d70dc;
+    color: white;
+    padding: 4px;
+    margin: 0px;
+    border: 0px;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+input[type=submit].sbutton:hover {
+    background-color: #4459d4;
+}
+
+#list
+{
+    width:100%;
+    margin: 0 auto;
+}
+#list td 
+{
+    font-size:1em;
+    padding:0px;
+    border: 0px;
+    text-align:left;
+    color:#000000;
+}
+#list a 
+{
+    text-decoration: none;
+    font-size: 17px;
+    color: #000077;
+}
+#list a:hover 
+{
+    text-decoration: underline; 
 }
 
 </style>

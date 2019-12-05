@@ -308,4 +308,23 @@ function init($conn)
     $_SESSION['uid'] = 0;
 }
 
+function check_board_manager($conn,$bid)
+{
+    if(!find($conn,'uid','sakura.manage','bid','1',$_SESSION['uid']) && 
+        !find($conn,'uid','sakura.manage','bid',$bid,$_SESSION['uid']))
+        return FALSE;
+    else return TRUE;
+}
+
+function query_num($conn,$from,$where)
+{   //调用此函数须确保查询的结果唯一
+    $sql = 'select count(*) from '.$from.' where '.$where;
+    $retval = mysqli_query($conn,$sql);
+    if(! $retval)
+        die("<br />查询失败：".mysqli_error($conn));
+    $row = mysqli_fetch_array($retval);
+    if(!$row) return NULL;
+    else return $row[0];
+}
+
 ?>
