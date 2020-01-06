@@ -34,7 +34,7 @@
     {
         if($_POST['call']=="25")
         {
-            execute_sql($conn, "UPDATE sakura.board SET board_name = '".$_POST['pid']."' WHERE board_id = ".$_GET['bid']);
+            execute_sql($conn, "UPDATE sakura.board SET board_name = '".$_POST['board_name']."' WHERE board_id = ".$_GET['bid']);
         }
         else if($_POST['call']=="27")
         {

@@ -174,12 +174,12 @@ function build_web_database($conn)
             values ('boss', PASSWORD('boss'), 'boss@x.com', '博士', 3),
                     ('bokoblin', PASSWORD('bokoblin'), 'bokoblin@zelda.com', '猪', 1),
                     ('moblin', PASSWORD('moblin'), 'moblin@zelda.com', '莫布林', 1),
+                    ('momo', PASSWORD('momo'), 'momo@omyoji.com', '桃の花', 1),
+                    ('yuki', PASSWORD('yuki'), 'yuki@omyoji.com', '冻住不许走', 1),
                     ('pikachu', PASSWORD('pikachu'), 'pikachu@pokemon.com', '电气老鼠', 1),
                     ('akie', PASSWORD('akie'), 'akie@utami.com', 'Akie秋绘', 1),
-                    ('momo', PASSWORD('momo'), 'momo@omyoji.com', '桃花花', 1),
                     ('yousa', PASSWORD('yousa'), 'yousa@utami.com', '冷鸟yousa', 1),
-                    ('kirlia', PASSWORD('kirlia'), 'kirlia@pokemon.com', 'Lovely', 1),
-                    ('yuki', PASSWORD('yuki'), 'yuki@omyoji.com', '冻住不许走', 1);";
+                    ('kirlia', PASSWORD('kirlia'), 'kirlia@pokemon.com', 'Lovely', 1);";
     execute_sql($conn, $sql);
     
     // 版面表：bid（1为总版面），名称
@@ -205,7 +205,7 @@ function build_web_database($conn)
     $sql = 'ALTER table sakura.board CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
     $sql = "INSERT into sakura.manage (bid,uid) 
-            value (1,1), (2,2), (3,4), (4,5), (5,6), (6,7)";
+            value (1,1), (2,2), (3,6), (4,8), (5,4), (6,7)";
     execute_sql($conn, $sql);   
     
     // 帖子表：pid，标题，所属版面，发帖用户，创建时间，更新时间(最迟回复时间)，
@@ -229,8 +229,8 @@ function build_web_database($conn)
     $sql = "INSERT into sakura.posts (post_title, post_bid, post_uid, post_createtime, post_updatetime, post_content, post_state) 
             values ('净网倡议', 1, 1, 10000000, 10000000, '大家注意下别搞黄色。', 4),
                     ('别再欺负猪猪了！', 2, 2, 10001234, 10001234, '猪猪活得很艰难，猪猪心很累。', 1),
-                    ('有能耐把我删了', 3, 4, 10005000, 10005000, '听说剑盾要删一批幸运儿么，不知道有没有我，好紧张啊(=^ ^=)', 1),
-                    ('吹爆绘总', 4, 7, 10010010, 10010010, '啊绘总唱歌太好听了，我冷鸟吹爆！', 1),
+                    ('有能耐把我删了', 3, 6, 10005000, 10005000, '听说剑盾要删一批幸运儿么，不知道有没有我，好紧张啊(=^ ^=)', 1),
+                    ('吹爆绘总', 4, 8, 10010010, 10010010, '啊绘总唱歌太好听了，我冷鸟吹爆！', 1),
                     ('莫布林的水帖', 2, 3, 10017000, 10017000, '刚好五个字', 1);";
     execute_sql($conn, $sql);
                 
@@ -250,7 +250,7 @@ function build_web_database($conn)
     $sql = 'ALTER table sakura.reply CONVERT TO CHARACTER SET utf8';
     execute_sql($conn, $sql);
     $sql = "INSERT into sakura.reply (reply_uid, reply_pid, reply_createtime, reply_content, reply_state) 
-            values (5, 4, 10012000, '啊谢谢冷鸟捧场w', 1),
+            values (7, 4, 10012000, '啊谢谢冷鸟捧场w', 1),
                     (9, 5, 10018888, '我也水水经验', 1),
                     (2, 5, 10020000, '每日水一水', 1);";
     execute_sql($conn, $sql);
@@ -276,7 +276,33 @@ function build_web_database($conn)
             (2, 1, 100031, 'hi. how are you?', 0),
             (1, 2, 100045, 'i\'m fine, and you?', 0),
             (2, 1, 100062, 'i\'m die.', 0),
-            (3, 1, 123456, 'awsl', 0);";
+            (3, 1, 123456, 'awsl', 0),
+            (4, 5, 130000, 'yukiちゃん，私信功能上线了诶', 0),
+            (5, 4, 130014, '是啊momoちゃん，好像挺好用呢', 0),
+            (5, 4, 130028, '我们不如来测试测试bug吧(\#^.^#)', 0),
+            (4, 5, 130035, '好啊！', 0),
+            (4, 5, 130049, '先测试看看两个人同时发消息会是什么情况吧~', 0),
+            (5, 4, 130063, 'ok，那么就从我下一条消息之后数7秒，一起发一条测试吧？', 0),
+            (4, 5, 130070, '好', 0),
+            (5, 4, 130077, '开始', 0),
+            (5, 4, 130084, 'test', 0),
+            (4, 5, 130084, 'TEST', 0),
+            (4, 5, 130091, '然后换我，从我下一条开始数7秒一起发', 0),
+            (5, 4, 130098, '行', 0),
+            (4, 5, 130105, '开始', 0),
+            (4, 5, 130112, 'TEST', 0),
+            (5, 4, 130112, 'test', 0),
+            (5, 4, 130119, '看起来比较随机...', 0),
+            (4, 5, 130133, '嗯。。好我们再测试看看如果是很长的文本的话，对话框会不会爆炸吧==', 0),
+            (5, 4, 130147, '嗯试试看。\n这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本这是很长的文本\n这是好长好长的文本啊！！', 0),
+            (4, 5, 130154, '=2-lpgl323=-fpl=l=-dkv=-o,\'23n4ri0ij0\'\\2340m0vm\\\)qwoimrifv=qq\\/s,ospmk20o34-it,-gi-3i4-f-03,-i2-3f-\-0v-033423r23r090<>?\"][[2p=p230f129r123i4\`~2\|3-fmvng0vj=3r0-i1-fk-ovmomefim20icma//./,./,{}::[]]fl,-vr-cmnv=1=0jf0soc,;03cr0nvminb-1n-ifnnvefinnsnniomoomosom\n按法律卡死了可麻烦了开幕式代理费目前我离开你过来口令卡萌沙拉咔玫琳凯马萨莱卡棉\nおさかなのりアップデエルアーダ伝えてアシスタン葵葵補遺おさ￥おいいジャパンネット出掛ける飲まない了解しました', 0),
+            (4, 5, 130161, '好像完全没有问题！', 0),
+            (5, 4, 130168, '是啊，甚至连对齐和换行都没有出问题呢！', 0),
+            (4, 5, 130175, '这样优秀的作业，我想，给个满分都不过分吧？', 0),
+            (5, 4, 130182, '同意！满分满分~', 0),
+            (4, 5, 130196, '现在才1970年，离作业ddl还有50年呢^_^我先去睡一会啦', 0),
+            (5, 4, 130210, '嗯嗯我也先睡了，おやすみなさい～', 0),
+            (4, 5, 130217, 'おやすみ～', 0);";
     execute_sql($conn, $sql);
 }
 
@@ -325,6 +351,28 @@ function query_num($conn,$from,$where)
     $row = mysqli_fetch_array($retval);
     if(!$row) return NULL;
     else return $row[0];
+}
+
+function echo_msg_item($row)
+{
+    # msg_id, msg_sender, msg_receiver, msg_time, msg_content #
+    echo "<div style='min-height: 48px; padding: 0 16px 16px;'>";
+    if ($row[1] == $_SESSION['uid'])
+    {
+        $float = 'right';
+        $color = 'green';
+    }
+    else
+    {
+        $float = 'left';
+        $color = 'black';
+    }
+    $msg = "<p style='text-align: $float; margin: 0px; color: $color;'>". date('Y-m-d H:i:s', $row[3]) . '</p>' . 
+        "<p style='float: $float; margin: 0px;'>". $row[4] . "</p>";
+    echo "<div style='float: $float; max-width: 80%;'>".
+        $msg. "</div>";
+    echo "<div style='clear: both; height: 0;'></div>";
+    echo "</div>";
 }
 
 ?>

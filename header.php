@@ -3,13 +3,21 @@
 <!-- <style>
 h1 {color:plum;}
 </style> -->
-<body>
+<body style="background-image: url('pic/test.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center 55%;
+            background-attachment: fixed;
+            opacity: 1;">
+<!-- <body> -->
+<!-- <body style="background-color: rgb(233,233,233);"> -->
 <?php 
 include_once 'style.php';
 include_once 'database_util.php';
+#print_r($_SESSION);
 ?>
 
-<?php   
+<?php
     echo '<div class="header"><a href="/" class="title">'.$title.'</a>';
     if(isset($_GET['bid']) && $_GET['bid']!=1)
     {

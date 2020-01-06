@@ -422,7 +422,7 @@ div.editor{
 }
 
 div.userleft{
-    width: 20%;
+    width: 200px;
     float: left;
     border: 0px;
     padding: 0px;
@@ -585,6 +585,56 @@ input[type=submit].sbutton:hover {
 #list a:hover 
 {
     text-decoration: underline; 
+}
+.msg-box
+{
+    width: 800px;
+    height: 420px;
+    background-color: blueviolet;
+    margin: auto;
+    margin-top: 20px;
+    border-style: solid;
+    opacity: 0.84;
+}
+.vertical-menu
+{
+    width: 25%;
+    height: 100%;
+    overflow-y: auto;
+    float: left;
+    background-color: rgb(255,225,225);
+}
+.vertical-menu input[type=submit]
+{
+    width: 100%;
+    background-color: rgb(206,219,255);
+    color: black;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+}
+.vertical-menu input[type=submit]:hover
+{
+    background-color: rgb(134,217,253);
+}
+.vertical-menu input[type=submit].active
+{
+    background-color: rgb(109,117,250);
+    color: white;
+}
+.msg-box-content
+{
+    background-color: rgb(215,253,255);
+    height: 80%;
+    width: 75%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.msg-box-send
+{
+    background-color: palegreen;
+    height: 20%;
+    width: 100%;
 }
 
 </style>

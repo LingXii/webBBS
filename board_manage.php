@@ -175,6 +175,7 @@ while($row = mysqli_fetch_array($board_val))
     echo '<td  width="60%">'.$managers.'</td>';        
 }
 echo '</table>';
+echo '<br><a href="/editor.php?bid=1" class="edit_btn">发布论坛公告</a>';
 ?>
 </div> 
 

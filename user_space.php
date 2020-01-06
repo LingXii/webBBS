@@ -108,6 +108,10 @@
 
     if ($_SESSION['uid'] == $_GET['uid'])
     {
+        echo '<form method="post" action="passwd_change.php">
+        <input type="submit" class="button" value="修改密码" />
+        </form>';
+
         echo '<form method="post" action="">
         <input type="submit" class="button" value="退出登录" />
         <input type="hidden" name="call" value="15" />

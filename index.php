@@ -180,11 +180,18 @@ if($bid == 1)
     {
         if($row_cnt%2 == 0) echo '<tr class="posteven">';
         else echo '<tr class="postodd">';
-        echo '<td width="70%><a href="/post_reader.php?pid='.$row[0].'">'.$row[1].'</a></td>';
+        echo '<td width="70%">';
+        $lock_form = '<form method="post" action="">'
+            .'<input type="submit" class="lock" value=""/>'
+            .'<input type="hidden" name="call" value="49"/>'
+            .'<input type="hidden" name="pid" value="'.$row[0].'"/>'
+            .'</form>';
+        if(find($conn,'uid','sakura.manage','bid','1',$_SESSION['uid'])) echo $lock_form;
+        echo '<a href="/post_reader.php?pid='.$row[0].'">'.$row[1].'</a></td>';
         $user_nickname = query_one($conn,'user_nickname','sakura.user_info','user_id',$row[3]);
-        echo '<td width="30%><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
-        echo '</tr>';   
-        $row_cnt += 1;
+        echo '<td width="30%"><a href="/user_space.php?uid='.$row[3].'">'.$user_nickname.'</a></td>';
+        echo '</tr>';  
+        $row_cnt += 1;    
     }
     echo '</table>';
     
